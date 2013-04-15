@@ -1,0 +1,1 @@
+﻿# -*- coding: utf-8 -*-cells = [[0 for i in range(10)] for i in range(10)]cells[5][5] = 9def transition(neighbors):    """Функция, возвращающая новое значение клетки по заданным значениям её соседей.    neighbors - соседство (двухмерный список или кортеж)    """    pass
