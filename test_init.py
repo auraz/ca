@@ -12,7 +12,8 @@ class TestInit(unittest.TestCase):
         neighbors = [[1, 2, 3],
                      [4, 5, 6],
                      [3, 2, 1]]
-        self.assertEqual(init.transition(neighbors), 3)
+        self.assertEqual(init.transition(neighbors), 3.0)
 
-suite = unittest.TestLoader().loadTestsFromTestCase(TestInit)
-unittest.TextTestRunner(verbosity=2).run(suite)
+if __name__ == "__main__":
+	suite = unittest.TestLoader().loadTestsFromTestCase(TestInit)
+	unittest.TextTestRunner(verbosity=2).run(suite)
