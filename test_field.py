@@ -7,43 +7,43 @@ class TestField(unittest.TestCase):
 
     def setUp(self):
         self.field = Field([
-							[0   , 1   , 2   , 3   , 4   ],
-							[0.5 , 1.4 , 2.3 , 3.2 , 4.1 ],
-							['a' , 'b' , 'c' , 'd' , 'e' ],
-							[None, []  , ()  , {}  , ''  ],
-							[None, [1] , '23', 4   , 5   ],
-							[5   , 6   , 7   , 8   , 9   ],
-							                               ])
+                            [0   , 1   , 2   , 3   , 4   ],
+                            [0.5 , 1.4 , 2.3 , 3.2 , 4.1 ],
+                            ['a' , 'b' , 'c' , 'd' , 'e' ],
+                            [None, []  , ()  , {}  , ''  ],
+                            [None, [1] , '23', 4   , 5   ],
+                            [5   , 6   , 7   , 8   , 9   ],
+                                                           ])
     
     def test1_1(self):
-    	"""testing the  width() method"""
-    	self.assertEqual(self.field.width(), 5)
+        """testing the  width() method"""
+        self.assertEqual(self.field.width(), 5)
 
     def test1_2(self):
-    	"""testing the height() method"""
-    	self.assertEqual(self.field.height(), 6)
+        """testing the height() method"""
+        self.assertEqual(self.field.height(), 6)
     
     def test2_1(self):
-    	"""testing list features: item access"""
-    	self.assertEqual(self.field[4][2], '23')
-    	self.assertEqual(self.field[3][0], None)
-    	self.assertEqual(self.field[0][4],  4  )
-    	self.assertEqual(self.field[5]   , [5, 6, 7, 8, 9])
+        """testing list features: item access"""
+        self.assertEqual(self.field[4][2], '23')
+        self.assertEqual(self.field[3][0], None)
+        self.assertEqual(self.field[0][4],  4  )
+        self.assertEqual(self.field[5]   , [5, 6, 7, 8, 9])
 
     def test2_2(self):
-    	"""testing list features: slicing ..."""
-    	self.assertEqual(self.field[3:5],
-    		[
-			 [None, []  , ()  , {}  , ''  ],
-			 [None, [1] , '23', 4   , 5   ],
-										    ])
-    	self.assertEqual(self.field[2::2],
-    		[
-			 ['a' , 'b' , 'c' , 'd' , 'e' ],
-			 [None, [1] , '23', 4   , 5   ],
-										    ])
-    	self.assertEqual(self.field[0][::2], [0, 2, 4])
-    	self.assertEqual(self.field[:],   self.field  )
+        """testing list features: slicing ..."""
+        self.assertEqual(self.field[3:5],
+            [
+             [None, []  , ()  , {}  , ''  ],
+             [None, [1] , '23', 4   , 5   ],
+                                            ])
+        self.assertEqual(self.field[2::2],
+            [
+             ['a' , 'b' , 'c' , 'd' , 'e' ],
+             [None, [1] , '23', 4   , 5   ],
+                                            ])
+        self.assertEqual(self.field[0][::2], [0, 2, 4])
+        self.assertEqual(self.field[:],   self.field  )
 
     def test3_1(self):
         """testing the get_subfield() method: single cell  ..."""
@@ -54,12 +54,12 @@ class TestField(unittest.TestCase):
     def test3_2(self):
         """testing the get_subfield() method: single row.. ..."""
         self.assertEqual(self.field.get_subfield(1, 4, 4),
-        	           				   [[[1], '23', 4, 5]])
+                                       [[[1], '23', 4, 5]])
     
     def test3_3(self):
         """testing the get_subfield() method: single column..."""
         self.assertEqual(self.field.get_subfield(1, 1, 1, 5),
-        	[
+            [
              [1.4],
              ['b'],
              [[ ]],
@@ -70,11 +70,11 @@ class TestField(unittest.TestCase):
     def test3_4(self):
         """testing the get_subfield() method: rectangular area"""
         self.assertEqual(self.field.get_subfield(1, 2, 3, 4), 
-        	[
-			 ['b' , 'c' , 'd' ],
-			 [[]  , ()  , {}  ],
-			 [[1] , '23', 4   ],
-			 [6   , 7   , 8   ],
+            [
+             ['b' , 'c' , 'd' ],
+             [[]  , ()  , {}  ],
+             [[1] , '23', 4   ],
+             [6   , 7   , 8   ],
                                 ])
 
 
