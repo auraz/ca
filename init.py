@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 import Field
 
@@ -29,14 +29,25 @@ import Field
     содержит число 1.
     """
 
-field = Field([
- 		 [0, 0, 0, 0, 9],
-		 [0, 0, 0, 0, 0],
-         [0, 9, 0, 0, 0],
-         [0, 0, 0, 0, 0],
-		 [9, 0, 0, 0, 0],
-		 [0, 0, 9, 0, 0],
-		                 ])
+a = [
+     [0, 0, 0, 0, 9],
+     [0, 0, 0, 0, 0],
+     [0, 9, 0, 0, 0],
+     [0, 0, 0, 0, 0],
+     [9, 0, 0, 0, 0],
+     [0, 0, 9, 0, 0],
+                     ])
+
+b = [
+     [0, 0, 0, 0,-1],
+     [0, 0, 0, 0, 0],
+     [0, 1, 0, 0, 0],
+     [0, 0, 0, 0, 0],
+     [-1,0, 0, 0, 0],
+     [0, 0, 1, 0, 0],
+                     ])
+
+field = Field(a, b)
 
 #or field = Field(10, 10)
 
@@ -44,10 +55,10 @@ def average(neighbors):
     """Среднее арифметическое всех соседей. None исключаем из расчёта."""
     n, s = 0, 0
     for row in neighbors:
-    	for cell in row:
-    		if cell is not None:
-    			n += 1
-    			s += cell
+        for cell in row:
+            if cell is not None:
+                n += 1
+                s += cell
     return float(s) / n
 
 

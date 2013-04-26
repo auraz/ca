@@ -4,14 +4,7 @@ import unittest
 import init
 from ca import *
 
-field = [
-          [0, 0, 0, 0, 9],
-          [0, 0, 0, 0, 0],
-          [0, 9, 0, 0, 0],
-          [0, 0, 0, 0, 0],
-          [9, 0, 0, 0, 0],
-          [0, 0, 9, 0, 0],
-                          ]
+field = Field(init.a, init.b)
 
 class TestCellularAutomaton(unittest.TestCase):
     
