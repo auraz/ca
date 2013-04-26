@@ -3,6 +3,7 @@
 """Клеточный автомат."""
     
 import init
+import field
 import copy
 
 class CellularAutomaton():
@@ -23,10 +24,10 @@ class CellularAutomaton():
         Этот слой обозначает границу клеточного автомата.
         Получить поле без слоя из None можно методом get_field().
 
-        Сама таблица реализована в виде двухмерного списка.
+        Сама таблица реализована в виде двухмерного списка (класс Field).
 
-        Нумерация начинается (по обеим осям) с -1.
-        -1 - это граница, 0 - первая строка/столбец.
+        Нумерация начинается (по обеим осям) с 0.
+        0 - это граница, 1 - первая строка/столбец.
         """
 
 
@@ -43,23 +44,23 @@ class CellularAutomaton():
             """
 
         self.next_value = next_value
-        self.width = len(field[0])
-        self.height = len(field)
-        # Сделаем копию, иначе переданный извне список будет меняться
+        self.width = field.width()
+        self.height = field.height()
+        # Сделаем копию, иначе переданное извне поле будет меняться
         self.field = copy.deepcopy(field)
         self.__surround(self.field)
 
     def __surround(self, grid):
-        """Окружает заданный двухмерный список слоем из None со всех сторон.
+        """Окружает поле слоем из None со всех сторон.
 
-            grid - двухмерный список.
+            grid - поле.
 
-            Меняет сам список. Возвращает None.
+            Меняет само поле. Возвращает None.
             """
 
-        # Определяем ширину и высоту списка:
-        w = len(grid[0])
-        h = len(grid)
+        # Получаем ширину и высоту списка:
+        w = grid.width()
+        h = grid.height()
 
         for row in grid:
             row[w:w] = [None]   # справа
@@ -68,15 +69,39 @@ class CellularAutomaton():
         grid[h:h] = [[None for i in range(w + 2)]]   # снизу
         grid[0:0] = [grid[h]]                        # сверху
     
+    def neighbors(self, x, y):
+        """Возвращает всех соседей заданной клетки.
+
+            x и y - координаты клетки.
+
+            Возвращает двухмерный список 3 х 3, содержащий значения
+            заданной клетки и 8 её соседей. При этом сама заданная
+            клетка всегда будет по центру.
+            Если клетка находится у границы клеточного автомата,
+            часть соседей будет иметь значение на None.
+            Например, если метод вернул
+
+            None None None
+            None   1    2
+            None   4    5
+
+            , то это значит, что клетка находится в левом верхнем углу.
+            """
+        return self.field.get_subfield(x, y, 3, 3)
+
+    def get_field(self):
+        """Возвращает все клетки клеточного автомата"""
+        return self.field.get_subfield(1, 1, self.width, self.height)
+
     def next_cell_value(self, x, y):
         """Возвращает следующее значение клетки с координатами x и y."""
         return self.next_value(self.neighbors(x, y))
     
     def next(self):
         """Выполняет одну итерацию клеточного автомата."""
-        new_field = [[self.next_cell_value(i, j) 
-                        for i in range(self.width)] 
-                            for j in range(self.height)]
+        new_field = field.Field([[self.next_cell_value(i, j) 
+                                for i in range(self.width)] 
+                                    for j in range(self.height)])
         self.field = new_field
         self.__surround(self.field)
     
