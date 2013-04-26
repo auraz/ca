@@ -15,15 +15,23 @@ class TestField(unittest.TestCase):
 							[5   , 6   , 7   , 8   , 9   ],
 							                               ])
     
-    def test1(self):
+    def test1_1(self):
+    	"""testing the  width() method"""
+    	self.assertEqual(self.field.width(), 5)
+
+    def test1_2(self):
+    	"""testing the height() method"""
+    	self.assertEqual(self.field.height(), 6)
+    
+    def test2_1(self):
     	"""testing list features: item access"""
     	self.assertEqual(self.field[4][2], '23')
     	self.assertEqual(self.field[3][0], None)
     	self.assertEqual(self.field[0][4],  4  )
     	self.assertEqual(self.field[5]   , [5, 6, 7, 8, 9])
 
-    def test2(self):
-    	"""testing list features: slicing"""
+    def test2_2(self):
+    	"""testing list features: slicing ..."""
     	self.assertEqual(self.field[3:5],
     		[
 			 [None, []  , ()  , {}  , ''  ],
@@ -37,18 +45,18 @@ class TestField(unittest.TestCase):
     	self.assertEqual(self.field[0][::2], [0, 2, 4])
     	self.assertEqual(self.field[:],   self.field  )
 
-    def test3(self):
+    def test3_1(self):
         """testing the get_subfield() method: single cell  ..."""
         self.assertEqual(self.field.get_subfield(1, 2), [['b']])
         self.assertEqual(self.field.get_subfield(4, 1), [[4.1]])
         self.assertEqual(self.field.get_subfield(0, 5), [[ 5 ]])
     
-    def test4(self):
+    def test3_2(self):
         """testing the get_subfield() method: single row.. ..."""
         self.assertEqual(self.field.get_subfield(1, 4, 4),
         	           				   [[[1], '23', 4, 5]])
     
-    def test5(self):
+    def test3_3(self):
         """testing the get_subfield() method: single column..."""
         self.assertEqual(self.field.get_subfield(1, 1, 1, 5),
         	[
@@ -59,7 +67,7 @@ class TestField(unittest.TestCase):
              [ 6 ],
                    ])
     
-    def test6(self):
+    def test3_4(self):
         """testing the get_subfield() method: rectangular area"""
         self.assertEqual(self.field.get_subfield(1, 2, 3, 4), 
         	[
