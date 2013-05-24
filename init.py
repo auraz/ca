@@ -29,25 +29,42 @@ import field
     содержит число 1.
     """
 
-a = [
-     [0, 0, 0, 0, 9],
-     [0, 0, 0, 0, 0],
-     [0, 9, 0, 0, 0],
-     [0, 0, 0, 0, 0],
-     [9, 0, 0, 0, 0],
-     [0, 0, 9, 0, 0],
-                     ]
+# a = [
+#      [0, 0, 0, 0, 9],
+#      [0, 0, 0, 0, 0],
+#      [0, 9, 0, 0, 0],
+#      [0, 0, 0, 0, 0],
+#      [9, 0, 0, 0, 0],
+#      [0, 0, 9, 0, 0],
+#                      ]
 
 # b = [
-#      [0, 0, 0, 0,-1],
 #      [0, 0, 0, 0, 0],
-#      [0, 1, 0, 0, 0],
 #      [0, 0, 0, 0, 0],
-#      [-1,0, 0, 0, 0],
 #      [0, 0, 1, 0, 0],
-#                      ])
+#      [0, 0, -1,0, 0],
+#      [0, 0, 0, 0, 0],
+#      [0, 0, 0, 0, 0],
+#                      ]
 
-field = field.Field(a)
+c = [[0 for i in range(25)] for i in range(25)]
+c[1][2], c[2][3], c[3][3], c[3][2], c[3][1] = 1, 1, 1, 1, 1
+# Это выглядит так:
+# 0 0 0 0 0 ...
+# 0 0 1 0 0 ...
+# 0 0 0 1 0 ...
+# 0 1 1 1 0 ...
+# 0 0 0 0 0 ...
+# ...  ...  ...
+#
+# Или так:
+#
+#     *
+#       *
+#   * * *
+#
+
+field = field.Field(c)
 
 #or field = Field(10, 10)
 
@@ -61,6 +78,33 @@ def average(neighbors):
                 s += cell
     return float(s) / n
 
+def sum(neighbors):
+    """Сумма всех соседей. None исключаем из расчёта."""
+    s = 0
+    for row in neighbors:
+        for cell in row:
+            if cell is not None:
+                s += cell
+    return s
+
+
+def life(neighbors):
+    """Conway's Game of Life"""
+    cell = neighbors[1][1]
+    s = sum(neighbors) - cell
+    if cell == 0:
+        if s == 3:
+            return 1
+        else:
+            return 0
+    else:
+        if s == 2 or s == 3:
+            return 1
+        else:
+            return 0
+
+
+
 
 # Подставить нужную функцию:
-next_value = average
+next_value = life
