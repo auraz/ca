@@ -74,10 +74,9 @@ if __name__ == '__main__':
     ca = CellularAutomaton()
     print
     print "Initial state of the cellular automaton:"
-    print ca.field
+    print ca.field.get_inner()
     print
     print "After one iteration:"
     ca.next()
-    print ca.field
-    # print_2d(ca.get_field())
+    print ca.field.get_inner()
     print

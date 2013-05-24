@@ -3,60 +3,12 @@
 """Клеточный автомат."""
     
 import init
+from grid import Grid
 import copy
 
 
 class Cell(object):
     pass
-
-
-class Grid(list):
-    """Двухмерный список.
-
-        Двухмерный список, предназначенный для использования в качестве
-        поля клеточного автомата (но может быть использован и для других
-        целей).
-        Этот класс унаследован от list и ведёт себя так же, как и list.
-        Поддерживает тот же синтаксис и методы.
-        Его можно заполнять любыми объектами.
-        Но нужно следить за тем, чтобы это был именно двухмерный список -
-        список из списков, при этом каждый вложенный список должен быть
-        одной и той же длины. Иначе он будет работать неправильно.
-        Внутренняя проверка этих условий пока что не реализована.
-        """
-
-    def width(self):
-        """Возвращает ширину поля."""
-        if self == []:
-            return 0
-        else:
-            return len(self[0])
-
-    def height(self):
-        """Возвращает высоту поля."""
-        return len(self)
-
-
-    def get_subgrid(self, left  = 0, top    = 0,
-                        width = 1, height = 1):
-        """Возвращает клетки из заданного прямоугольного диапазона.
-
-            left и top задают положение верхнего левого угла диапазона.
-            width и height - его ширина и высота.
-
-            Возвращает поле, содержащее клетки из заданного
-            прямоугольного диапазона.
-            """
-
-        return Grid([row[left : left + width]
-                  for row in self[top : top + height]])
-
-    def __str__(seq):
-        """Выводит двухмерную последовательность построчно."""
-        s = '[\n'
-        for row in seq:
-            s += str(row) + '\n'
-        return s + ']'
 
 
 
@@ -93,6 +45,12 @@ class Field(Grid):
         self[h:h] = [[None for i in range(w + 2)]]   # снизу
         self[0:0] = [self[h]]                        # сверху
     
+    def get_inner(self):
+        """Returns the field without the border."""
+        return self.get_subgrid(1, 1, self.width() - 2, self.height() - 2)
+
+
+
     def neighbors(self, x, y):
         """Возвращает всех соседей заданной клетки.
 
@@ -115,4 +73,7 @@ class Field(Grid):
 
 #   get_a, get_b (returning Grid instances)
 
+    # def __str__(seq):
+    #     """Выводит двухмерную последовательность построчно."""
+    #     return 
 
