@@ -13,72 +13,6 @@ class TestCellularAutomaton(unittest.TestCase):
         self.ca = CellularAutomaton(field, init.average)
     
     def test1(self):
-        """testing the get_field() method ..."""
-        self.assertEqual(self.ca.get_field(), field)
-    
-    # def test2(self):
-    #     """testing the get_subfield() method."""
-    #     self.assertEqual(self.ca.get_field().get_subfield(1, 2), [[9]])
-    #     self.assertEqual(self.ca.get_field().get_subfield(1, 0, 4), [[0, 0, 0, 9]])
-    #     self.assertEqual(self.ca.get_field().get_subfield(1, 1, 1, 4), [
-    #                                                         [0],
-    #                                                         [9],
-    #                                                         [0],
-    #                                                         [0],
-    #                                                             ])
-    #     self.assertEqual(self.ca.get_field().get_subfield(0, 2, 3, 4), [
-    #                                                         [0, 9, 0],
-    #                                                         [0, 0, 0],
-    #                                                         [9, 0, 0],
-    #                                                         [0, 0, 9],
-    #                                                                   ])
-    #     # Border cases:
-    #     self.assertEqual(self.ca.get_field().get_subfield(-1, 2, 7), 
-    #                                       [[None, 0, 9, 0, 0, 0, None]])
-
-    #     self.assertEqual(self.ca.get_field().get_subfield(5, -1, 1, 4), [
-    #                                                          [None],
-    #                                                          [None],
-    #                                                          [None],
-    #                                                          [None],
-    #                                                                 ])
-    #     self.assertEqual(self.ca.get_field().get_subfield(-1, 4, 4, 3),
-    #                                         [
-    #                                          [None,  9  ,  0  ,  0  ],
-    #                                          [None,  0  ,  0  ,  9  ],
-    #                                          [None, None, None, None],
-    #                                                                   ])
-    
-    # def test3(self):
-    #     """testing the get_cell() method  ..."""
-    #     self.assertEqual(self.ca.get_cell(0, 0), 0)
-    #     self.assertEqual(self.ca.get_cell(1, 2), 9)
-    #     self.assertEqual(self.ca.get_cell(2, 5), 9)
-    #     self.assertEqual(self.ca.get_cell(-1, -1), None)
-    #     self.assertEqual(self.ca.get_cell(5, 3), None)
-    
-    def test4(self):
-        """testing the neighbors(x, y) method"""
-        self.assertEqual(self.ca.neighbors(1, 3), [[0, 9, 0],
-                                                   [0, 0, 0],
-                                                   [9, 0, 0]])
-        
-        self.assertEqual(self.ca.neighbors(1, 5), [[9,    0,    0],
-                                                   [0,    0,    9],
-                                                   [None, None, None]])
-        
-        self.assertEqual(self.ca.neighbors(4, 0), [[None, None, None],
-                                                   [0,    9,    None],
-                                                   [0,    0,    None]])
-
-    # def test3(self):
-    #     """testing the are_neighbors(x1, y1, x2, y2) method"""
-    #     self.assertTrue(self.ca.are_neighbors(5, 7, 5, 7,))
-    #     self.assertTrue(self.ca.are_neighbors(4, 6, 4, 5,))
-    #     self.assertTrue(self.ca.are_neighbors(2, 8, 1, 9,))
-    #     self.assertFalse(self.ca.are_neighbors(4, 1, 7, 6,))
-    
-    def test5(self):
         """testing the next() method  ... ..."""
         self.ca.next()
         expected = [
@@ -89,7 +23,7 @@ class TestCellularAutomaton(unittest.TestCase):
                     [1.5, 2.0, 1.0, 1.0, 0.0],
                     [2.25, 3.0, 1.5, 1.5, 0.0],
                                                ]
-        self.assertEqual(self.ca.get_field(), expected)
+        self.assertEqual(self.ca.field.get_inner(), expected)
 
 
 if __name__ == '__main__':
