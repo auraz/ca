@@ -4,7 +4,7 @@ import pygame, sys
 from ca import *
 
 # GLOBAL CONSTANTS
-PAUSE = 50    # milliseconds
+PAUSE = 500    # milliseconds
 CANVAS_WIDTH = 500
 CANVAS_HEIGHT = 500
 CANVAS_SIZE = [CANVAS_WIDTH, CANVAS_HEIGHT]
@@ -16,6 +16,8 @@ CA = CellularAutomaton()
 # Предполагается, что это не пустой клеточный автомат, иначе будет деление на 0
 CELL_WIDTH = CANVAS_WIDTH / (CA.field.width() - 2)
 CELL_HEIGHT = CANVAS_HEIGHT / (CA.field.height() - 2)
+
+running = False
 
 pygame.init()
 
@@ -44,7 +46,8 @@ pygame.display.set_caption('Cellular Automaton Visualisation')
 
 try:
     clock = pygame.time.Clock()
-    
+
+    draw(CA.field.get_inner())
     
     while True:         # Main game loop
         # Event handling
@@ -52,16 +55,15 @@ try:
             if event.type == pygame.QUIT:
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    draw(CA.field.get_inner())
+                if event.key == pygame.K_RETURN:
                     CA.next()
-                # if event.key == pygame.K_UP:
-                #     ship.set_thrust(True)
-                # if event.key == pygame.K_LEFT:
-                #     ship.change_ang_vel(ANGULAR_VEL)
-                # if event.key == pygame.K_RIGHT:
-                #     ship.change_ang_vel(-ANGULAR_VEL)
-        
+                    draw(CA.field.get_inner())
+                elif event.key == pygame.K_SPACE:
+                    running = not running
+
+        if running:
+            CA.next()
+            draw(CA.field.get_inner())
 
         # Making pause
         clock.tick(1000.0 / PAUSE)      # this is frequency, not an interval
