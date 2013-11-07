@@ -1,7 +1,44 @@
-﻿"""Класс Nucleus и некоторые вспомогательные функции."""
+# -*- coding: UTF-8 -*-
+
+"""Модель образования и роста зародышей."""
 
 import random
-from ca.grid import Grid
+
+import logging
+from logging import debug, info
+logging.basicConfig(
+    level    = logging.DEBUG,
+    filename = 'model.log',
+    filemode = 'w',
+    format   = '%(message)s')
+
+import ca.grid
+
+class Field(ca.grid.Grid):
+    """docstring for Field"""
+    def __str__(self):
+        """Возвращает поле в виде строки.
+
+            # - зародыш
+            o - волокно
+            . - пустая клетка
+            Например:
+            ..........
+            ...ooo....
+            ...o#o....
+            ...ooo....
+            ..........
+            """
+        for y in range(self.field.height()):
+            for x in range(self.field.width()):
+                if self.field[y][x] == 0:
+                    print '.',
+                elif self.field[y][x] == 1:
+                    print 'o',
+                else:
+                    print '#',
+            print
+        
 
 class Nucleus:
     """Зародыш.
@@ -248,7 +285,7 @@ class Model:
 
         # Create a field, initialize it with zeros
         # Create an empty list of nuclei and fibers
-        self.field = Grid([[0 for i in range(field_size)] for i in range(field_size)])
+        self.field = Field([[0 for i in range(field_size)] for i in range(field_size)])
         self.nuclei = []
         self.fibers = []
 
@@ -256,15 +293,7 @@ class Model:
 
 
     def print_field(self):
-        for y in range(self.field.height()):
-            for x in range(self.field.width()):
-                if self.field[y][x] == 0:
-                    print '.',
-                elif self.field[y][x] == 1:
-                    print 'o',
-                else:
-                    print '#',
-            print
+        raise DeprecationWarning("Don't use the print_field method!")
 
 
     # def spawn_a_nucleus(self):
@@ -285,16 +314,9 @@ class Model3(Model):
         self.ratio = ratio
     
     def run(self):
-        # """Запуск модели.
+        """Запуск модели.
 
-        #     Цикл.
-        #         Забрасывается один зародыш. Если он попадает в чью-то мёртвую зону - тут же умирает.
-        #         Выбирается случайный зародыш.
-        #         Проверяется, в какие стороны он может расти.
-        #         Если ни в какие - он либо умирает, либо объявляется досгигнувшим статуса волокна.
-        #         Иначе случайно выбирается направление, и он в этом направлении растёт.
-        #     Условие окончания цикла пока не ясно.
-        #     """
+            """
 
         self.spawn_many_nuclei()
 
@@ -327,4 +349,4 @@ class Model3(Model):
 
 
 if __name__ == '__main__':
-    Model3(100, 4, 5, 0.1).run()
+    Model3(20, 3, 2, 0.1).run()
