@@ -47,10 +47,10 @@ class Grid(list):
         return Grid([row[left : left + width]
                   for row in self[top : top + height]])
 
-    def __str__(seq):
+    def __str__(self):
         """Возвращает строковое представление таблицы."""
         s = '[\n'
-        for row in seq:
+        for row in self:
             s += ' ' + str(row) + '\n'
         return s + ']'
 

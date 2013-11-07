@@ -77,6 +77,18 @@ class TestGrid(unittest.TestCase):
              [6   , 7   , 8   ],
                                 ])
 
+    def test4(self):
+        """testing the __str__() method"""
+        self.assertEqual(str(self.grid), 
+"""[
+ [0, 1, 2, 3, 4]
+ [0.5, 1.4, 2.3, 3.2, 4.1]
+ ['a', 'b', 'c', 'd', 'e']
+ [None, [], (), {}, '']
+ [None, [1], '23', 4, 5]
+ [5, 6, 7, 8, 9]
+]"""
+)
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(TestGrid)
