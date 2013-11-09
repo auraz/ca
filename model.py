@@ -15,19 +15,22 @@ logging.basicConfig(
 import ca.grid
 
 class Field(ca.grid.Grid):
-    """docstring for Field"""
+    """Этот класс создан исключительно для того, чтобы переопределить метод __str__()."""
     def __str__(self):
         """Возвращает поле в виде строки.
 
             # - зародыш
             o - волокно
             . - пустая клетка
+            В начале и в конце - пустая строка.
             Например:
+
             ..........
-            ...ooo....
-            ...o#o....
-            ...ooo....
+            ...oooo...
+            ...o#oo...
+            ...oooo...
             ..........
+
             """
         s = ""
         for y in range(self.height()):
@@ -42,23 +45,25 @@ class Field(ca.grid.Grid):
         return s
         
 
+
 class Nucleus:
     """Зародыш.
 
-        Зародыш содержит следующие данные:
-
-        status - состояние зародыша, может иметь три значения:
-            'n' - зародыш (nucleus) - значение по умолчанию
-            'g' - растущее (growing) волокно
-            'f' - волокно (fiber), которое уже выросло
-        x, y - координаты зародыша
-        left, right, up, down - на сколько клеток этот зародыш вырос
-        в каждом из этих направлений
-        model
         """
 
     def __init__(self, x, y, model, status = 'n', left = 0, right = 0, up = 0, down = 0):
         """Создаёт новый зародыш.
+
+            Зародыш содержит следующие данные:
+
+            x, y - координаты зародыша
+            model - модель, к которой относится зародыш
+            status - состояние зародыша, может иметь три значения:
+                'n' - зародыш (nucleus) - значение по умолчанию
+                'g' - растущее (growing) волокно
+                'f' - волокно (fiber), которое уже выросло
+            left, right, up, down - на сколько клеток этот зародыш вырос
+            в каждом из этих направлений
 
             Помимо заполнения данных, также прописывает зародыш в поле и в списке.
             """
@@ -75,29 +80,22 @@ class Nucleus:
         model.field[y][x] = self
         model.nuclei.append(self)
 
-    def kill(self):
-        
-        # Выписываем зародыш из списка зародышей:
-        self.model.nuclei.remove(self)
-
-        # Заполняем место, где находится зародыш и волокно, нулями
-        if self.status == 'n':
-            self.model.field[self.y][self.x] = 0
-        else:
-            for i in range(self.x - self.left, self.x + self.right + 1):
-                for j in range(self.y - self.up, self.y + self.down + 1):
-                    self.model.field[j][i] = 0
-
-        info("The nucleus is killed.")
-        info("There are now %s nuclei and %s fibers. The field now looks like this:", 
-            len(self.model.nuclei), len(self.model.fibers))
-        info(self.model.field)
-
     def __str__(self):
         return '#'
         # return str(self.__dict__)
 
     def is_anything_near(self):
+        """Проверяет, есть ли у зародыша соседи.
+
+            Исследует окрестность зародыша: все клетки на расстоянии gap или меньше.
+            Возвращает False, если все эти клетки (кроме самого зародыша) содержат нули.
+            Иначе возвращает True.
+
+            В настоящее время этот метод имеет смысл применять только для голых зародышей
+            (у которых status == 'n').
+            """
+        if self.status != 'n':
+            raise DeprecationWarning ("For now, this method is intended for use with 'n' nuclei only.")
         f = self.model.field
         n = self.model.field_size
         gap = self.model.gap
@@ -108,18 +106,44 @@ class Nucleus:
         for j in range(y1, y2):
             for i in range(x1, x2):
                 if f[j][i] != 0 and (i != self.x or j != self.y):
-                    info("Something found at x = %s and y = %s!", i, j)
+                    debug("Something found at x = %s and y = %s!", i, j)
                     return True
-        info("Nothing found near.")
+        debug("Nothing found near.")
         return False
 
     def look_around(self):
+        """Определяет, в каких направлениях зародыш может расти.
+
+            Проверяет полоски слева, справа, сверху и снизу от зародыша.
+            Например, если gap == 2, то проверяет следующие клетки (отмечены звёздочками):
+            
+              * * * * *
+            *           *
+            *           *
+            *     #     *
+            *           *
+            *           *
+              * * * * *
+            
+            Если в одной из этих полосок найдено что-либо, кроме нуля,
+            то зародыш не может расти в соответствующем направлении.
+
+            Также учитывает приграничные случаи.
+
+            Результаты записывает в поля данных зародыша для последующего использования:
+            self.can_grow_left
+            self.can_grow_right
+            self.can_grow_up
+            self.can_grow_down
+            self.dims - число измерений, по которым зародыш уже достиг размера fiber_size
+            """
+
         gap = self.model.gap
         n   = self.model.field_size
-        xl = self.x - self.left - gap - 1
-        xr = self.x + self.right + gap + 1
-        yu = self.y - self.up - gap - 1
-        yd = self.y + self.down + gap + 1
+        xl  = self.x - self.left - gap - 1
+        xr  = self.x + self.right + gap + 1
+        yu  = self.y - self.up - gap - 1
+        yd  = self.y + self.down + gap + 1
         self.dims = 0
         debug("xl = %s, xr = %s, yu = %s, yd = %s", xl, xr, yu, yd)
 
@@ -203,11 +227,8 @@ class Nucleus:
             info("Now the field looks now like this:")
             info(self.model.field)
         elif not (self.can_grow_left or self.can_grow_right or self.can_grow_up or self.can_grow_down):
-            info("The nucleus can't grow so it will dye.")
-            self.kill()
-            # info("There are now %s nuclei and %s fibers.", len(self.model.nuclei), len(self.model.fibers))
-            # info("Now the field looks now like this:")
-            # info(self.model.field)
+            info("The nucleus can't grow so it will die.")
+            self.die()
         else:
             choices = [self.can_grow_left, self.can_grow_right, self.can_grow_up, self.can_grow_down]
             directions = [self.grow_to_left, self.grow_to_right, self.grow_to_up, self.grow_to_down]
@@ -218,9 +239,6 @@ class Nucleus:
             self.status = 'g'
             info("Now the field looks now like this:")
             info(self.model.field)
-
-
-
 
 
     def grow_to_left(self):
@@ -253,11 +271,40 @@ class Nucleus:
             self.model.field[self.y + self.down][x] = 1
 
 
+    def die(self):
+        
+        # Выписываем зародыш из списка зародышей:
+        self.model.nuclei.remove(self)
+
+        # Заполняем место, где находится зародыш и волокно, нулями
+        if self.status == 'n':
+            self.model.field[self.y][self.x] = 0
+        else:
+            for i in range(self.x - self.left, self.x + self.right + 1):
+                for j in range(self.y - self.up, self.y + self.down + 1):
+                    self.model.field[j][i] = 0
+
+        info("The nucleus died.")
+        info("There are now %s nuclei and %s fibers. The field now looks like this:", 
+            len(self.model.nuclei), len(self.model.fibers))
+        info(self.model.field)
+
 
 
 
 class Model:
-    """Базовый класс для моделей"""
+    """Базовый класс для моделей
+
+        Модель содержит:
+            field - поле
+            nuclei - список зародышей, которые ещё не выросли до нужного размера
+            fibers - список зародышей, которые уже выросли и получили статус волокна (f)
+        А также параметры field_size, fiber_size, gap.
+
+        
+
+        """
+
     def __init__(self, field_size, fiber_size, gap):
         self.field_size = field_size
         self.fiber_size = fiber_size
@@ -292,8 +339,9 @@ class Model3(Model):
 
             # Проверяем его мёртвую зону. Если там что-нибудь есть - зародыш умирает.
             if nuc.status == 'n' and nuc.is_anything_near():
-                nuc.kill()
+                nuc.die()
                 continue
+            
             nuc.look_around()
             nuc.grow()
 
@@ -315,5 +363,49 @@ class Model3(Model):
         info(self.field)
 
 
+
+class Model4(Model):
+    """docstring for Model4"""
+    def run(self):
+        n = self.field_size
+        counter = 0
+        while True:
+            counter += 1
+
+            # Засеваем случайный зародыш
+            x, y = random.randrange(n), random.randrange(n)
+            if self.field[y][x] == 0:
+                nuc = Nucleus(x, y, self)
+                if nuc.is_anything_near():
+                    nuc.die()
+                else:
+                    info("A random nucleus is spawned. x = %s, y = %s.", x, y)
+                    info("Now the field looks like this:")
+                    info(self.field)
+            
+            # Выбираем случайный зародыш
+            nuc = self.nuclei[random.randrange(len(self.nuclei))]
+            info("A random nucleus is chosen. x = %s, y = %s, status = %s.", nuc.x, nuc.y, nuc.status)
+
+            # Проверяем его мёртвую зону. Если там что-нибудь есть - зародыш умирает.
+            if nuc.status == 'n' and nuc.is_anything_near():
+                nuc.die()
+                continue
+            
+            nuc.look_around()
+            nuc.grow()
+
+            if len(self.nuclei) == 0:
+                info("There are no more nuclei. Stopping the model.")
+                info("%s iterations have been carried out.", counter)
+                print counter, "iterations have been carried out."
+                break
+
+        # print "The field looks like this:"
+        # print self.field
+        print "{} nuclei have grown to fibers.".format(len(self.fibers))
+        
+
 if __name__ == '__main__':
-    Model3(100, 4, 5, 0.1).run()
+    # Model3(100, 4, 5, 0.1).run()
+    Model4(100, 4, 5).run()
