@@ -20,12 +20,6 @@ import os
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.insert(0, os.path.abspath('.'))
 sys.path.insert(0, os.path.abspath('../..'))
-print
-print "sys.path:"
-print sys.path
-print
-# sys.path.insert(0, os.path.abspath('../mca'))
-# sys.path.insert(0, os.path.abspath('../models'))
 
 # -- General configuration ------------------------------------------------
 
@@ -39,7 +33,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.coverage',
     'sphinx.ext.pngmath',
-    'sphinx.ext.viewcode',
+    # 'sphinx.ext.viewcode',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
