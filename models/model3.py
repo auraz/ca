@@ -79,8 +79,8 @@ class Model3(MCA):
             nuc.look_around()
             nuc.try_to_grow()
 
-        print "The field looks like this:"
-        print self.field
+        # print "The field looks like this:"
+        # print self.field
         print "{} nuclei have grown to fibers.".format(len(self.fibers))
 
 
@@ -99,9 +99,10 @@ class Model3(MCA):
 
 
 if __name__ == '__main__':
-    Model3(
-        field_size = 100,
-        fiber_size =   4,
-        gap        =   5,
-        ratio      =   0.1).run()
-    print
+    for i in range(10):
+        Model3(
+            field_size = 100,
+            fiber_size =   4,
+            gap        =   5,
+            ratio      =   0.1).run()
+        # print
