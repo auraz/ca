@@ -54,15 +54,23 @@ class Model6(Model4):
 
         # while len(self.nuclei) > 0:
         for i in range(6):
+
+            # reporting:
             print "growing... {} nuclei and {} fibers.".format(
                 len(self.nuclei), len(self.fibers))
             self.report()
             field_of_numbers = [[2 if isinstance(i, Nucleus) else i for i in j] for j in self.field]
             im = plt.imshow(field_of_numbers, cmap=cm.gray, interpolation='nearest')
             plt.show()
+
+            # growing:
             for nuc in self.nuclei:
                 nuc.look_around()
-                nuc.try_to_grow()
+                nuc.try_to_grow(die_safely = True)
+            # killing nuclei safely:
+            for nuc in self.condemned:
+            	nuc.die()
+            self.condemned = []
 
         self.report()
         print  "The field now looks like this:"

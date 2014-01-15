@@ -297,7 +297,7 @@ class Nucleus:
                         break
 
 
-    def try_to_grow(self):
+    def try_to_grow(self, die_safely = False):
         """Зародыш растёт, объявляется готовым волокном или умирает.
             
             Зародыш растёт в случайном направлении из доступных,
@@ -313,7 +313,10 @@ class Nucleus:
             info(self.mca.field)
         elif not (self.can_grow_left or self.can_grow_right or self.can_grow_up or self.can_grow_down):
             info("The nucleus can't grow so it will die.")
-            self.die()
+            if die_safely:
+                self.mca.condemned.append(self)
+            else:
+                self.die()
         else:
             choices = [self.can_grow_left, self.can_grow_right, self.can_grow_up, self.can_grow_down]
             directions = [self.grow_to_left, self.grow_to_right, self.grow_to_up, self.grow_to_down]
@@ -428,6 +431,7 @@ class MCA:
         self.field = Field([[0 for i in range(field_size)] for i in range(field_size)])
         self.nuclei = []
         self.fibers = []
+        self.condemned = []
 
 
     def report(self):
