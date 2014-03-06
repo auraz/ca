@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import logging
 from logging import debug, info
 logging.basicConfig(
-    level    = logging.INFO,
+    level    = logging.WARNING,
     filename = 'model.log',
     filemode = 'w',
     format   = '%(message)s')
@@ -42,23 +42,23 @@ class Model6(Model4):
         """Запуск модели."""
 
         attempts = 0
-        while attempts < 20000:
+        while attempts < 2*self.field_size**2:
             print attempts, len(self.nuclei)
-            for i in range(1000):
+            for i in range(5000):
                 attempts += 1
                 self.spawn_a_nucleus()
 
-        print len(self.nuclei), "nuclei,",  attempts, "attempts"
+        print len(self.nuclei), "nuclei,",  attempts, "attempts.  ",
 
         self.gap = 3
 
         # while len(self.nuclei) > 0:
-        for i in range(6):
+        for i in range((self.fiber_size - 1) * 2):
 
             # reporting:
             print "growing... {} nuclei and {} fibers.".format(
                 len(self.nuclei), len(self.fibers))
-            self.report()
+            # self.report()
             field_of_numbers = [[2 if isinstance(i, Nucleus) else i for i in j] for j in self.field]
             im = plt.imshow(field_of_numbers, cmap=cm.gray, interpolation='nearest')
             plt.show()
@@ -72,15 +72,14 @@ class Model6(Model4):
             	nuc.die()
             self.condemned = []
 
-        self.report()
-        print  "The field now looks like this:"
-        print self.field
+        # self.report()
+        # print  "The field now looks like this:"
+        # print self.field
         print "There are now {} nuclei and {} fibers.".format(
             len(self.nuclei), len(self.fibers))
 
 
         field_of_numbers = [[2 if isinstance(i, Nucleus) else i for i in j] for j in self.field]
-
         im = plt.imshow(field_of_numbers, cmap=cm.gray, interpolation='nearest')
         plt.show()
 
@@ -99,7 +98,7 @@ class Model6(Model4):
 if __name__ == '__main__':
     for i in range(1):
         Model6(
-            field_size = 100,
+            field_size = 50,
             fiber_size =   4,
             gap        =   7).run()
         print
