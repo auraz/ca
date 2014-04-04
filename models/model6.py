@@ -41,16 +41,31 @@ class Model6(Model4):
     def run(self):
         """Запуск модели."""
 
+        k  = 10.0
+        g1 = 7
+        g2 = 1
+        f  = 4
+        step = 1000
+        plot = False
+        results = [0]
+
+        self.fiber_size = f
+        self.gap        = g1
+
         attempts = 0
-        while attempts < 2*self.field_size**2:
-            print attempts, len(self.nuclei)
-            for i in range(5000):
+        print "0000 0"
+        while attempts < k*self.field_size**2:
+            for i in range(step):
                 attempts += 1
                 self.spawn_a_nucleus()
+            print attempts, len(self.nuclei)
+            results.append(len(self.nuclei))
 
-        print len(self.nuclei), "nuclei,",  attempts, "attempts.  ",
+        # print len(self.nuclei), "nuclei,",  attempts, "attempts.  ",
+        print results
+        return results
 
-        self.gap = 3
+        self.gap = g2
 
         # while len(self.nuclei) > 0:
         for i in range((self.fiber_size - 1) * 2):
@@ -59,9 +74,9 @@ class Model6(Model4):
             print "growing... {} nuclei and {} fibers.".format(
                 len(self.nuclei), len(self.fibers))
             # self.report()
-            field_of_numbers = [[2 if isinstance(i, Nucleus) else i for i in j] for j in self.field]
-            im = plt.imshow(field_of_numbers, cmap=cm.gray, interpolation='nearest')
-            plt.show()
+            # field_of_numbers = [[2 if isinstance(i, Nucleus) else i for i in j] for j in self.field]
+            # im = plt.imshow(field_of_numbers, cmap=cm.gray, interpolation='nearest')
+            # plt.show()
 
             # growing:
             for nuc in self.nuclei:
@@ -78,10 +93,15 @@ class Model6(Model4):
         print "There are now {} nuclei and {} fibers.".format(
             len(self.nuclei), len(self.fibers))
 
+        print "100.0 * {} * {} / {}".format(
+            len(self.nuclei), self.fiber_size**2, self.field_size**2)
+        print "Fibers take {}%.".format(
+            100.0 * len(self.nuclei) * self.fiber_size**2 / self.field_size**2)
 
-        field_of_numbers = [[2 if isinstance(i, Nucleus) else i for i in j] for j in self.field]
-        im = plt.imshow(field_of_numbers, cmap=cm.gray, interpolation='nearest')
-        plt.show()
+        if plot:
+            field_of_numbers = [[2 if isinstance(i, Nucleus) else i for i in j] for j in self.field]
+            im = plt.imshow(field_of_numbers, cmap=cm.gray, interpolation='nearest')
+            plt.show()
 
 #     if len(self.nuclei) == 0:
         #         info("There are no more nuclei. Stopping the model.")
@@ -96,9 +116,16 @@ class Model6(Model4):
 
 
 if __name__ == '__main__':
-    for i in range(1):
-        Model6(
-            field_size = 50,
-            fiber_size =   4,
-            gap        =   7).run()
+    general_results = []
+    for i in range(100):
         print
+        print "Запуск №", i+1
+        print
+        general_results.append(Model6(
+            field_size = 100,
+            fiber_size =   4,
+            gap        =   7).run())
+    general_results = Grid(general_results)
+    print
+    print "Results:"
+    print general_results
