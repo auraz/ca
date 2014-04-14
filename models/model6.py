@@ -5,6 +5,7 @@ import matplotlib.cm as cm
 import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
 
+import random
 
 import logging
 from logging import debug, info
@@ -23,7 +24,7 @@ from models.model4 import Model4
 
 
 
-class Model6(Model4):
+class Model6(MCA):
     """Модель 6.
 
         Заполняем поле нулями.
@@ -52,18 +53,39 @@ class Model6(Model4):
         self.fiber_size = f
         self.gap        = g1
 
-        attempts = 0
-        print "0000 0"
-        while attempts < k*self.field_size**2:
-            for i in range(step):
-                attempts += 1
-                self.spawn_a_nucleus()
-            print attempts, len(self.nuclei)
-            results.append(len(self.nuclei))
+        n = self.field_size
+        max_attempts = self.field_size**2
+        random_list = range(max_attempts)
+        random.shuffle(random_list)
+        debug(random_list)
+
+        for r in random_list:
+            x = r % 100
+            y = r / 100
+            debug(r)
+            debug(x)
+            debug(y)
+            nuc = Nucleus(x, y, self)
+            if nuc.is_anything_near():
+                nuc.die()
+            else:
+                info("A random nucleus is spawned. x = %s, y = %s.", x, y)
+                self.report()
+
+        print len(self.nuclei), "nuclei,"
+
+        # attempts = 0
+        # print "0000 0"
+        # while attempts < k*self.field_size**2:
+        #     for i in range(step):
+        #         attempts += 1
+        #         self.spawn_a_nucleus()
+        #     print attempts, len(self.nuclei)
+        #     results.append(len(self.nuclei))
 
         # print len(self.nuclei), "nuclei,",  attempts, "attempts.  ",
-        print results
-        return results
+        # print results
+        # return results
 
         self.gap = g2
 
@@ -84,7 +106,7 @@ class Model6(Model4):
                 nuc.try_to_grow(die_safely = True)
             # killing nuclei safely:
             for nuc in self.condemned:
-            	nuc.die()
+                nuc.die()
             self.condemned = []
 
         # self.report()
@@ -116,16 +138,20 @@ class Model6(Model4):
 
 
 if __name__ == '__main__':
-    general_results = []
-    for i in range(100):
-        print
-        print "Запуск №", i+1
-        print
-        general_results.append(Model6(
+    Model6(
             field_size = 100,
             fiber_size =   4,
-            gap        =   7).run())
-    general_results = Grid(general_results)
-    print
-    print "Results:"
-    print general_results
+            gap        =   7).run()
+    # general_results = []
+    # for i in range(100):
+    #     print
+    #     print "Запуск №", i+1
+    #     print
+    #     general_results.append(Model6(
+    #         field_size = 100,
+    #         fiber_size =   4,
+    #         gap        =   7).run())
+    # general_results = Grid(general_results)
+    # print
+    # print "Results:"
+    # print general_results
