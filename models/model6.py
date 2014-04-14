@@ -24,7 +24,7 @@ from models.model4 import Model4
 
 
 
-class Model6(MCA):
+class Model6(Model4):
     """Модель 6.
 
         Заполняем поле нулями.
@@ -39,32 +39,28 @@ class Model6(MCA):
         или умрут.
         """
 
-    def run(self):
+    def __init__(self, n, a, f, g1, g2):
+        MCA.__init__(self, n, f, g1)
+        self.attempts = a
+        self.g2 = g2
+
+
+    def run(self, plot = False, plot_each_step = False):
         """Запуск модели."""
 
-        k  = 10.0
-        g1 = 7
-        g2 = 1
-        f  = 4
-        step = 1000
-        plot = False
-        results = [0]
+        self.spawn_nuclei()
+        # self.spawn_nuclei_in_old_way(step = 1000)
+        self.grow_nuclei(plot, plot_each_step)
 
-        self.fiber_size = f
-        self.gap        = g1
 
-        n = self.field_size
-        max_attempts = self.field_size**2
-        random_list = range(max_attempts)
+    def spawn_nuclei(self):
+        random_list = range(self.field_size**2)
         random.shuffle(random_list)
-        debug(random_list)
 
-        for r in random_list:
+        print random_list[:self.attempts]
+        for r in random_list[:self.attempts]:
             x = r % 100
             y = r / 100
-            debug(r)
-            debug(x)
-            debug(y)
             nuc = Nucleus(x, y, self)
             if nuc.is_anything_near():
                 nuc.die()
@@ -74,31 +70,38 @@ class Model6(MCA):
 
         print len(self.nuclei), "nuclei,"
 
-        # attempts = 0
-        # print "0000 0"
-        # while attempts < k*self.field_size**2:
-        #     for i in range(step):
-        #         attempts += 1
-        #         self.spawn_a_nucleus()
-        #     print attempts, len(self.nuclei)
-        #     results.append(len(self.nuclei))
 
-        # print len(self.nuclei), "nuclei,",  attempts, "attempts.  ",
-        # print results
-        # return results
+    def spawn_nuclei_in_old_way(self, step):
+        # Needs Model4! Don't use if the base class isn't Model4.
 
-        self.gap = g2
+        results = [0]
+        attempts = 0
+        print "0000 0"
+        while attempts < self.attempts:
+            for i in range(step):
+                attempts += 1
+                self.spawn_a_nucleus()  # method of Model4
+            print attempts, len(self.nuclei)
+            results.append(len(self.nuclei))
 
-        # while len(self.nuclei) > 0:
+        print len(self.nuclei), "nuclei,",  attempts, "attempts.  ",
+        print results
+        return results
+
+    
+    def grow_nuclei(self, plot, plot_each_step):
+        self.gap = self.g2
+
         for i in range((self.fiber_size - 1) * 2):
 
             # reporting:
             print "growing... {} nuclei and {} fibers.".format(
                 len(self.nuclei), len(self.fibers))
             # self.report()
-            # field_of_numbers = [[2 if isinstance(i, Nucleus) else i for i in j] for j in self.field]
-            # im = plt.imshow(field_of_numbers, cmap=cm.gray, interpolation='nearest')
-            # plt.show()
+            if plot_each_step:
+                field_of_numbers = [[2 if isinstance(i, Nucleus) else i for i in j] for j in self.field]
+                im = plt.imshow(field_of_numbers, cmap=cm.gray, interpolation='nearest')
+                plt.show()
 
             # growing:
             for nuc in self.nuclei:
@@ -115,10 +118,10 @@ class Model6(MCA):
         print "There are now {} nuclei and {} fibers.".format(
             len(self.nuclei), len(self.fibers))
 
-        print "100.0 * {} * {} / {}".format(
-            len(self.nuclei), self.fiber_size**2, self.field_size**2)
-        print "Fibers take {}%.".format(
-            100.0 * len(self.nuclei) * self.fiber_size**2 / self.field_size**2)
+        concentration = 100.0 * len(self.nuclei) * self.fiber_size**2 / self.field_size**2
+        print "{} * {} / {} * 100% = {}%".format(
+            len(self.nuclei), self.fiber_size**2, self.field_size**2, concentration)
+        print "Fibers take {}%.".format(concentration)
 
         if plot:
             field_of_numbers = [[2 if isinstance(i, Nucleus) else i for i in j] for j in self.field]
@@ -132,16 +135,18 @@ class Model6(MCA):
         #         break
 
         # print "{} nuclei have grown to fibers.".format(len(self.fibers))
-
+        
 
 
 
 
 if __name__ == '__main__':
     Model6(
-            field_size = 100,
-            fiber_size =   4,
-            gap        =   7).run()
+            n  = 100,
+            a  = 200,
+            f  = 9,
+            g1 = 7,
+            g2 = 7).run(plot = True)
     # general_results = []
     # for i in range(100):
     #     print
