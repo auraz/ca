@@ -41,34 +41,45 @@ class Model6(Model4):
 
     def __init__(self, n, a, f, g1, g2):
         MCA.__init__(self, n, f, g1)
-        self.attempts = a
         self.g2 = g2
 
+        if a == "all":
+            self.attempts = n**2
+        else:
+            self.attempts = a
 
-    def run(self, plot = False, plot_each_step = False):
+
+
+    def run(self, step = "one step", plot = False):
         """Запуск модели."""
 
-        self.spawn_nuclei()
-        # self.spawn_nuclei_in_old_way(step = 1000)
-        self.grow_nuclei(plot, plot_each_step)
+        if step == "one step":
+            step = self.attempts
+
+        self.spawn_nuclei(step)
+        # self.spawn_nuclei_in_old_way(step)
+        # self.grow_nuclei(plot)
+        return len(self.nuclei)
 
 
-    def spawn_nuclei(self):
+
+    def spawn_nuclei(self, step):
         random_list = range(self.field_size**2)
         random.shuffle(random_list)
 
-        print random_list[:self.attempts]
-        for r in random_list[:self.attempts]:
-            x = r % 100
-            y = r / 100
-            nuc = Nucleus(x, y, self)
-            if nuc.is_anything_near():
-                nuc.die()
-            else:
-                info("A random nucleus is spawned. x = %s, y = %s.", x, y)
-                self.report()
+        for i in range(self.attempts / step):
+            for r in random_list[i * step : (i + 1) * step]:
+                x = r % self.field_size
+                y = r / self.field_size
+                nuc = Nucleus(x, y, self)
+                if nuc.is_anything_near():
+                    nuc.die()
+                # else:
+                #     info("A random nucleus is spawned. x = %s, y = %s.", x, y)
+                #     self.report()
+            # print i * step, "-", (i + 1) * step, ":",
+            print (i + 1) * step, len(self.nuclei)
 
-        print len(self.nuclei), "nuclei,"
 
 
     def spawn_nuclei_in_old_way(self, step):
@@ -89,7 +100,7 @@ class Model6(Model4):
         return results
 
     
-    def grow_nuclei(self, plot, plot_each_step):
+    def grow_nuclei(self, plot):
         self.gap = self.g2
 
         for i in range((self.fiber_size - 1) * 2):
@@ -98,7 +109,7 @@ class Model6(Model4):
             print "growing... {} nuclei and {} fibers.".format(
                 len(self.nuclei), len(self.fibers))
             # self.report()
-            if plot_each_step:
+            if plot == "each step":
                 field_of_numbers = [[2 if isinstance(i, Nucleus) else i for i in j] for j in self.field]
                 im = plt.imshow(field_of_numbers, cmap=cm.gray, interpolation='nearest')
                 plt.show()
@@ -123,7 +134,7 @@ class Model6(Model4):
             len(self.nuclei), self.fiber_size**2, self.field_size**2, concentration)
         print "Fibers take {}%.".format(concentration)
 
-        if plot:
+        if plot or (plot == "each step"):
             field_of_numbers = [[2 if isinstance(i, Nucleus) else i for i in j] for j in self.field]
             im = plt.imshow(field_of_numbers, cmap=cm.gray, interpolation='nearest')
             plt.show()
@@ -141,22 +152,24 @@ class Model6(Model4):
 
 
 if __name__ == '__main__':
-    Model6(
-            n  = 100,
-            a  = 200,
-            f  = 9,
-            g1 = 7,
-            g2 = 7).run(plot = True)
-    # general_results = []
-    # for i in range(100):
-    #     print
-    #     print "Запуск №", i+1
-    #     print
-    #     general_results.append(Model6(
-    #         field_size = 100,
-    #         fiber_size =   4,
-    #         gap        =   7).run())
-    # general_results = Grid(general_results)
-    # print
-    # print "Results:"
-    # print general_results
+    general_results = []
+    for i in range(100):
+        print
+        print "Launch No.", i+1
+        print
+        general_results.append(
+            Model6(
+                n  = 100,
+                a  = "all",
+                f  = 4,
+                g1 = 7,
+                g2 = 1
+            ).run(2500))
+
+    print
+    print "General results:"
+    print
+    for i in general_results:
+        print i
+    print
+
