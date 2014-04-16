@@ -43,23 +43,30 @@ class Model6(Model4):
         MCA.__init__(self, n, f, g1)
         self.g2 = g2
 
-        if a == "all":
-            self.attempts = n**2
-        else:
+        if isinstance(a, int):
             self.attempts = a
+        elif isinstance(a, float):
+            self.attempts = int(a * n**2)
+        else:
+            raise TypeError("'a' must be an int or a float.")
 
 
 
-    def run(self, step = "one step", plot = False):
+    def run(self, step, plot = False):
         """Запуск модели."""
 
-        if step == "one step":
-            step = self.attempts
+        if isinstance(step, int):
+            pass
+        elif isinstance(step, float):
+            step = int(step * self.attempts)
+        else:
+            raise TypeError("'step' must be an int or a float.")
 
-        self.spawn_nuclei(step)
+        nuclei_spawned = self.spawn_nuclei(step)
         # self.spawn_nuclei_in_old_way(step)
-        # self.grow_nuclei(plot)
-        return len(self.nuclei)
+        nuclei_grown, concentration = self.grow_nuclei(plot)
+        # return nuclei_spawned, nuclei_grown, concentration
+        return concentration
 
 
 
@@ -79,6 +86,8 @@ class Model6(Model4):
                 #     self.report()
             # print i * step, "-", (i + 1) * step, ":",
             print (i + 1) * step, len(self.nuclei)
+        
+        return len(self.nuclei)
 
 
 
@@ -101,14 +110,11 @@ class Model6(Model4):
 
     
     def grow_nuclei(self, plot):
+        # print "Growing:"
         self.gap = self.g2
 
         for i in range((self.fiber_size - 1) * 2):
 
-            # reporting:
-            print "growing... {} nuclei and {} fibers.".format(
-                len(self.nuclei), len(self.fibers))
-            # self.report()
             if plot == "each step":
                 field_of_numbers = [[2 if isinstance(i, Nucleus) else i for i in j] for j in self.field]
                 im = plt.imshow(field_of_numbers, cmap=cm.gray, interpolation='nearest')
@@ -123,11 +129,15 @@ class Model6(Model4):
                 nuc.die()
             self.condemned = []
 
+            # reporting:
+            print i + 1, len(self.nuclei)
+            # self.report()
+
         # self.report()
         # print  "The field now looks like this:"
         # print self.field
-        print "There are now {} nuclei and {} fibers.".format(
-            len(self.nuclei), len(self.fibers))
+        # print "There are now {} nuclei and {} fibers.".format(
+        #     len(self.nuclei), len(self.fibers))
 
         concentration = 100.0 * len(self.nuclei) * self.fiber_size**2 / self.field_size**2
         print "{} * {} / {} * 100% = {}%".format(
@@ -138,6 +148,8 @@ class Model6(Model4):
             field_of_numbers = [[2 if isinstance(i, Nucleus) else i for i in j] for j in self.field]
             im = plt.imshow(field_of_numbers, cmap=cm.gray, interpolation='nearest')
             plt.show()
+
+        return len(self.nuclei), concentration
 
 #     if len(self.nuclei) == 0:
         #         info("There are no more nuclei. Stopping the model.")
@@ -152,19 +164,33 @@ class Model6(Model4):
 
 
 if __name__ == '__main__':
+    # Model6(
+    #     n  = 100,
+    #     a  = 0.5,
+    #     f  = 4,
+    #     g1 = 7,
+    #     g2 = 3
+    # ).run(step = 0.2, plot = True)
+
     general_results = []
-    for i in range(100):
+    range_i, range_f = 30, 20
+    for i in range(range_i):
         print
-        print "Launch No.", i+1
-        print
-        general_results.append(
-            Model6(
-                n  = 100,
-                a  = "all",
-                f  = 4,
-                g1 = 7,
-                g2 = 1
-            ).run(2500))
+        print "~~~~~~~~~~~~~~ Loop No.", i, "~~~~~~~~~~~~~~"
+        results = []
+        for f in range(range_f):
+            print
+            print "f =", f, '                        loop no.', i
+            print
+            results.append(
+                Model6(
+                    n  = 100,
+                    a  = 1.0,
+                    f  = f,
+                    g1 = 7,
+                    g2 = 1
+                ).run(step = 0.2, plot = False))
+        general_results.append(results)
 
     print
     print "General results:"
