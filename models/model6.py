@@ -163,15 +163,8 @@ class Model6(Model4):
 
 
 
-if __name__ == '__main__':
-    # Model6(
-    #     n  = 200,
-    #     a  = 0.2,
-    #     f  = 15,
-    #     g1 = 14,
-    #     g2 = 7
-    # ).run(step = 0.2, plot = True)
 
+def run_many_times():
     general_results = []
     try:
         for i in range(20):
@@ -205,3 +198,15 @@ if __name__ == '__main__':
 
 
 
+def run_once():
+    Model6(
+        n  = 200,
+        a  = 0.2,
+        f  = 8,
+        g1 = 14,
+        g2 = 7
+    ).run(step = 0.2, plot = True)
+
+
+if __name__ == '__main__':
+    run_once()
