@@ -165,37 +165,43 @@ class Model6(Model4):
 
 if __name__ == '__main__':
     # Model6(
-    #     n  = 100,
-    #     a  = 0.5,
-    #     f  = 4,
-    #     g1 = 7,
-    #     g2 = 3
+    #     n  = 200,
+    #     a  = 0.2,
+    #     f  = 15,
+    #     g1 = 14,
+    #     g2 = 7
     # ).run(step = 0.2, plot = True)
 
     general_results = []
-    range_i, range_f = 30, 20
-    for i in range(range_i):
-        print
-        print "~~~~~~~~~~~~~~ Loop No.", i, "~~~~~~~~~~~~~~"
-        results = []
-        for f in range(range_f):
+    try:
+        for i in range(20):
             print
-            print "f =", f, '                        loop no.', i
-            print
-            results.append(
-                Model6(
-                    n  = 100,
-                    a  = 1.0,
-                    f  = f,
-                    g1 = 7,
-                    g2 = 1
-                ).run(step = 0.2, plot = False))
-        general_results.append(results)
+            print "~~~~~~~~~~~~~~ Loop No.", i+1, "~~~~~~~~~~~~~~"
+            results = []
+            for f in range(1, 21):
+                print
+                print "f =", f, '                        loop no.', i+1
+                print
+                results.append(
+                    Model6(
+                        n  = 200,
+                        a  = 0.2,
+                        f  = f,
+                        g1 = 14,
+                        g2 = 7
+                    ).run(step = 0.25, plot = False))
+            general_results.append(results)
 
-    print
-    print "General results:"
-    print
-    for i in general_results:
-        print i
-    print
+        
+    except KeyboardInterrupt:
+        print "\nKeyboard interrupt."
+    finally:
+        print
+        print "General results:"
+        print
+        for i in general_results:
+            print i
+        print
+
+
 
