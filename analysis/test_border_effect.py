@@ -26,9 +26,9 @@ class TestBorderEffect(unittest.TestCase):
         self.assertEqual(non_blank_cells(self.grid, 4),  0)
 
     def test_non_blank_concentration(self):
-        self.assertAlmostEqual(non_blank_concentration(self.grid, 0), 14/36.0)
-        self.assertAlmostEqual(non_blank_concentration(self.grid, 1), 12/28.0)
-        self.assertAlmostEqual(non_blank_concentration(self.grid, 2), 0.5)
+        self.assertAlmostEqual(non_blank_concentration(self.grid, 0), 14 / 36.0 * 100)
+        self.assertAlmostEqual(non_blank_concentration(self.grid, 1), 12 / 28.0 * 100)
+        self.assertAlmostEqual(non_blank_concentration(self.grid, 2), 50)
         self.assertAlmostEqual(non_blank_concentration(self.grid, 3), 0)
         self.assertAlmostEqual(non_blank_concentration(self.grid, 4), 0)
 
