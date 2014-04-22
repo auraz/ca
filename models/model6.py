@@ -26,17 +26,6 @@ from models.model4 import Model4
 
 class Model6(Model4):
     """Модель 6.
-
-        Заполняем поле нулями.
-        Далее, на каждой итерации:
-        1.  Случайным образом засеваем новый зародыш, при этом в его мёртвой
-            зоне не должно быть других зародышей и волокон.
-            Происходит только одна попытка забросить зародыш. Если она была
-            неудачной (в его мёртвой зоне что-то есть), сразу переходим к 2.
-        2.  Выбираем случайный зародыш или волокно и делаем всё аналогично
-            Модели 3: оно растёт, объявляется выросшим или умирает.
-        Так происходит до тех пор, пока все засеянные зародыши не вырастут
-        или умрут.
         """
 
     def __init__(self, n, a, f, g1, g2):
@@ -63,9 +52,7 @@ class Model6(Model4):
             raise TypeError("'step' must be an int or a float.")
 
         nuclei_spawned = self.spawn_nuclei(step)
-        # self.spawn_nuclei_in_old_way(step)
         nuclei_grown, concentration = self.grow_nuclei(plot)
-        # return nuclei_spawned, nuclei_grown, concentration
         return concentration
 
 
@@ -145,9 +132,15 @@ class Model6(Model4):
         print "Fibers take {}%.".format(concentration)
 
         if plot or (plot == "each step"):
-            field_of_numbers = [[2 if isinstance(i, Nucleus) else i for i in j] for j in self.field]
+            field_of_numbers = [[2 if isinstance(i, Nucleus) else i
+                for i in j] for j in self.field]
             im = plt.imshow(field_of_numbers, cmap=cm.gray, interpolation='nearest')
             plt.show()
+
+            # field_of_numbers = [[0.5 if isinstance(i, Nucleus) else -i for i in j]
+            #     for j in self.field.get_subgrid(200, 200, 500, 500)]
+            # im = plt.imshow(field_of_numbers, cmap=cm.gray, interpolation='nearest')
+            # plt.show()
 
         return len(self.nuclei), concentration
 
@@ -167,22 +160,22 @@ class Model6(Model4):
 def run_many_times():
     general_results = []
     try:
-        for i in range(20):
+        for i in range(10):
             print
             print "~~~~~~~~~~~~~~ Loop No.", i+1, "~~~~~~~~~~~~~~"
             results = []
-            for f in range(1, 21):
+            for n in [700, 1000]:
                 print
-                print "f =", f, '                        loop no.', i+1
+                print "n =", n, '                        loop no.', i+1
                 print
                 results.append(
                     Model6(
-                        n  = 200,
+                        n  = n,
                         a  = 0.2,
-                        f  = f,
+                        f  = 8,
                         g1 = 14,
                         g2 = 7
-                    ).run(step = 0.25, plot = False))
+                    ).run(step = 0.01, plot = False))
             general_results.append(results)
 
         
@@ -200,12 +193,12 @@ def run_many_times():
 
 def run_once():
     Model6(
-        n  = 200,
-        a  = 0.2,
-        f  = 8,
-        g1 = 14,
-        g2 = 7
-    ).run(step = 0.2, plot = True)
+        n  = 800,
+        a  = 0.03,
+        f  = 10,
+        g1 = 17,
+        g2 = 5
+    ).run(step = 0.01, plot = True)
 
 
 if __name__ == '__main__':
