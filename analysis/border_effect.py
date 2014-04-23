@@ -22,17 +22,56 @@ def non_blank_concentration(g, d):
 
 
 
-if __name__ == '__main__':
-    n = 10
+def run_once():
+    n = 1000
     m = Model6(
         n  = n,
-        a  = 1.0,
-        f  = 3,
-        g1 = 2,
-        g2 = 1
+        a  = 0.02,
+        f  = 5,
+        g1 = 7,
+        g2 = 3
     )
-    m.run(step = 0.1, plot = False)
-    print m.field
+    m.run(step = 0.01, plot = True)
 
-# print non_blank_cells(m.field, 2)
+    for d in range(n / 2):
+        print "{}\t{}\t{}".format(
+            d, non_blank_cells(m.field, d), non_blank_concentration(m.field, d))
 
+
+
+def run_many_times():
+    general_results = []
+    n = 200
+    for i in range(50):
+        print
+        print "~~~~~~~~~~~~~~ Launch No.", i+1, "~~~~~~~~~~~~~~"
+        print
+
+        results = []
+        m = Model6(
+            n  = n,
+            a  = 1.0,
+            f  = 4,
+            g1 = 7,
+            g2 = 3
+        )
+        m.run(step = 0.1, plot = False)
+
+        for d in range(n / 2):
+            results.append(non_blank_concentration(m.field, d))
+
+        general_results.append(results)
+
+    print
+    print "General results:"
+    print
+    for results in general_results:
+        for i in results:
+            print str(i) + '\t',
+        print '\n',
+
+
+
+
+if __name__ == '__main__':
+    run_many_times()
