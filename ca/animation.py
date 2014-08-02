@@ -10,9 +10,9 @@ import pygame, sys, math
 from ca import *
 
 # GLOBAL CONSTANTS
-TIMER_INTERVAL = 250    # интервал между итерациями в миллисекундах
-CANVAS_WIDTH = 500
-CANVAS_HEIGHT = 500
+TIMER_INTERVAL = 333    # интервал между итерациями в миллисекундах
+CANVAS_WIDTH = 1300
+CANVAS_HEIGHT = 1000
 CANVAS_SIZE = [CANVAS_WIDTH, CANVAS_HEIGHT]
 MIN = 0     # black
 MAX = 1     # white

@@ -132,7 +132,7 @@ class Model6(Model4):
         print "Fibers take {}%.".format(concentration)
 
         if plot or (plot == "each step"):
-            field_of_numbers = [[2 if isinstance(i, Nucleus) else i
+            field_of_numbers = [[0.25 if isinstance(i, Nucleus) else -i
                 for i in j] for j in self.field]
             im = plt.imshow(field_of_numbers, cmap=cm.gray, interpolation='nearest')
             plt.show()
@@ -158,48 +158,50 @@ class Model6(Model4):
 
 
 def run_many_times():
-    general_results = []
-    try:
-        for i in range(10):
-            print
-            print "~~~~~~~~~~~~~~ Loop No.", i+1, "~~~~~~~~~~~~~~"
-            results = []
-            for n in [700, 1000]:
-                print
-                print "n =", n, '                        loop no.', i+1
-                print
-                results.append(
-                    Model6(
-                        n  = n,
-                        a  = 0.2,
-                        f  = 8,
-                        g1 = 14,
-                        g2 = 7
-                    ).run(step = 0.01, plot = False))
-            general_results.append(results)
+    # general_results = []
+    # try:
+    for i in range(1):
+        print
+        print "~~~~~~~~~~~~~~ Loop No.", i+1, "~~~~~~~~~~~~~~"
+        print
+        Model6(
+            n  = 400,
+            a  = 0,
+            f  = 8,
+            g1 = 15,
+            g2 = 7
+        ).run(step = 1, plot = False)
+        # results = []
+        # for n in [700, 1000]:
+        #     print
+        #     print "n =", n, '                        loop no.', i+1
+        #     print
+            # results.append(
+        # general_results.append(results)
 
         
-    except KeyboardInterrupt:
-        print "\nKeyboard interrupt."
-    finally:
-        print
-        print "General results:"
-        print
-        for i in general_results:
-            print i
-        print
+    # except KeyboardInterrupt:
+    #     print "\nKeyboard interrupt."
+    # finally:
+    #     print
+    #     print "General results:"
+    #     print
+    #     for i in general_results:
+    #         print i
+    #     print
 
 
 
 def run_once():
     Model6(
-        n  = 800,
-        a  = 0.03,
-        f  = 10,
-        g1 = 17,
-        g2 = 5
-    ).run(step = 0.01, plot = True)
+        n  = 300,
+        a  = 0.1,
+        f  = 8,
+        g1 = 14,
+        g2 = 7
+    ).run(step = 0.1, plot = True)
 
 
 if __name__ == '__main__':
     run_once()
+    # run_many_times()

@@ -52,8 +52,9 @@ from math import *
     #      [0, 0, 0, 0, 0],
     #                      ]
 
-    # c = [[0 for i in range(25)] for i in range(25)]
-    # c[1][2], c[2][3], c[3][3], c[3][2], c[3][1] = 1, 1, 1, 1, 1
+c = [[0 for i in range(130)] for i in range(100)]
+c[51][62], c[51][63], c[52][61], c[52][62], c[53][62] = 1, 1, 1, 1, 1
+# c[1][2], c[2][3], c[3][3], c[3][2], c[3][1] = 1, 1, 1, 1, 1
     # Это выглядит так:
     # 0 0 0 0 0 ...
     # 0 0 1 0 0 ...
@@ -71,38 +72,38 @@ from math import *
 
 # дальше - по заданию
 
-def is_any_nucleus_near(x, y, f, n, r):
-    """Проверяет, нет ли зародыша (единички) около заданной клетки.
+# def is_any_nucleus_near(x, y, f, n, r):
+#     """Проверяет, нет ли зародыша (единички) около заданной клетки.
 
-        x, y - координаты клетки
-        f - поле (точнее, квадратный двухмерный список)
-        n - его размер
-        r - расстояние, в пределах которого не должно быть зародыша
-        """
+#         x, y - координаты клетки
+#         f - поле (точнее, квадратный двухмерный список)
+#         n - его размер
+#         r - расстояние, в пределах которого не должно быть зародыша
+#         """
 
-    x1 = max(x - r, 0)
-    y1 = max(y - r, 0)
-    x2 = min(x + r + 1, n)
-    y2 = min(y + r + 1, n)
-    for i in range(x1, x2):
-        for j in range(y1, y2):
-            if f[j][i] == 1:
-                return True
-    return False
+#     x1 = max(x - r, 0)
+#     y1 = max(y - r, 0)
+#     x2 = min(x + r + 1, n)
+#     y2 = min(y + r + 1, n)
+#     for i in range(x1, x2):
+#         for j in range(y1, y2):
+#             if f[j][i] == 1:
+#                 return True
+#     return False
 
-n = 100
-r = 8
-count = 0
-f = [[0 for i in range(n)] for i in range(n)]   # заполняем нулями
+# n = 100
+# r = 8
+# count = 0
+# f = [[0 for i in range(n)] for i in range(n)]   # заполняем нулями
 
-for i in range(500000):
-    x, y = random.randrange(n), random.randrange(n)
-    if not is_any_nucleus_near(x, y, f, n, r):
-        f[y][x] = 1
-        count += 1
+# for i in range(500000):
+#     x, y = random.randrange(n), random.randrange(n)
+#     if not is_any_nucleus_near(x, y, f, n, r):
+#         f[y][x] = 1
+#         count += 1
 
-field = field.Field(f)
-print count, 'nuclei'
+field = field.Field(c)
+# print count, 'nuclei'
 # print field
 
 def average(neighbors):

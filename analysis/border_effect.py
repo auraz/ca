@@ -23,15 +23,15 @@ def non_blank_concentration(g, d):
 
 
 def run_once():
-    n = 1000
+    n = 600
     m = Model6(
         n  = n,
-        a  = 0.02,
-        f  = 5,
-        g1 = 7,
-        g2 = 3
+        a  = 0.04,
+        f  = 17,
+        g1 = 30,
+        g2 = 15
     )
-    m.run(step = 0.01, plot = True)
+    m.run(step = 0.1, plot = True)
 
     for d in range(n / 2):
         print "{}\t{}\t{}".format(
@@ -41,8 +41,8 @@ def run_once():
 
 def run_many_times():
     general_results = []
-    n = 200
-    for i in range(50):
+    n = 600
+    for i in range(100):
         print
         print "~~~~~~~~~~~~~~ Launch No.", i+1, "~~~~~~~~~~~~~~"
         print
@@ -50,10 +50,10 @@ def run_many_times():
         results = []
         m = Model6(
             n  = n,
-            a  = 1.0,
-            f  = 4,
-            g1 = 7,
-            g2 = 3
+            a  = 0.04,
+            f  = 17,
+            g1 = 30,
+            g2 = 15
         )
         m.run(step = 0.1, plot = False)
 
@@ -74,4 +74,5 @@ def run_many_times():
 
 
 if __name__ == '__main__':
+    # run_once()
     run_many_times()
