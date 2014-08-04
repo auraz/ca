@@ -24,7 +24,7 @@ from models.model4 import Model4
 
 
 
-class Model6(Model4):
+class Model6(MCA):
     """Модель 6.
         """
 
@@ -78,22 +78,22 @@ class Model6(Model4):
 
 
 
-    def spawn_nuclei_in_old_way(self, step):
-        # Needs Model4! Don't use if the base class isn't Model4.
+    # def spawn_nuclei_in_old_way(self, step):
+    #     # Needs Model4! Don't use if the base class isn't Model4.
 
-        results = [0]
-        attempts = 0
-        print "0000 0"
-        while attempts < self.attempts:
-            for i in range(step):
-                attempts += 1
-                self.spawn_a_nucleus()  # method of Model4
-            print attempts, len(self.nuclei)
-            results.append(len(self.nuclei))
+    #     results = [0]
+    #     attempts = 0
+    #     print "0000 0"
+    #     while attempts < self.attempts:
+    #         for i in range(step):
+    #             attempts += 1
+    #             self.spawn_a_nucleus()  # method of Model4
+    #         print attempts, len(self.nuclei)
+    #         results.append(len(self.nuclei))
 
-        print len(self.nuclei), "nuclei,",  attempts, "attempts.  ",
-        print results
-        return results
+    #     print len(self.nuclei), "nuclei,",  attempts, "attempts.  ",
+    #     print results
+    #     return results
 
     
     def grow_nuclei(self, plot):
@@ -103,8 +103,8 @@ class Model6(Model4):
         for i in range((self.fiber_size - 1) * 2):
 
             if plot == "each step":
-                field_of_numbers = [[2 if isinstance(i, Nucleus) else i for i in j] for j in self.field]
-                im = plt.imshow(field_of_numbers, cmap=cm.gray, interpolation='nearest')
+                # field_of_numbers = [[2 if isinstance(i, Nucleus) else i for i in j] for j in self.field]
+                im = plt.imshow(self.field, cmap=cm.gray, interpolation='nearest')
                 plt.show()
 
             # growing:
@@ -132,9 +132,9 @@ class Model6(Model4):
         print "Fibers take {}%.".format(concentration)
 
         if plot or (plot == "each step"):
-            field_of_numbers = [[0.25 if isinstance(i, Nucleus) else -i
+            field_to_plot = [[1 if i == 2 else -i * 4
                 for i in j] for j in self.field]
-            im = plt.imshow(field_of_numbers, cmap=cm.gray, interpolation='nearest')
+            im = plt.imshow(field_to_plot, cmap=cm.gray, interpolation='nearest')
             plt.show()
 
             # field_of_numbers = [[0.5 if isinstance(i, Nucleus) else -i for i in j]
@@ -199,7 +199,7 @@ def run_once():
         f  = 8,
         g1 = 14,
         g2 = 7
-    ).run(step = 0.1, plot = True)
+    ).run(step = 0.1, plot = False)
 
 
 if __name__ == '__main__':

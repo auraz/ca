@@ -72,37 +72,38 @@ from logging import debug, info
 import sys
 sys.path.append("..")
 
-from ca.grid import Grid
+# from ca.grid import Grid
+import numpy
 
-class Field(Grid):
-    """Этот класс создан только для того, чтобы переопределить метод __str__()."""
-    def __str__(self):
-        """Возвращает поле в виде строки.
+# class Field(numpy.ndarray):
+#     """Этот класс создан только для того, чтобы переопределить метод __str__()."""
+#     def __str__(self):
+#         """Возвращает поле в виде строки.
 
-            # - зародыш
-            o - волокно
-            . - пустая клетка
-            В начале и в конце - пустая строка.
-            Например:
+#             # - зародыш
+#             o - волокно
+#             . - пустая клетка
+#             В начале и в конце - пустая строка.
+#             Например:
 
-            ..........
-            ...oooo...
-            ...o#oo...
-            ...oooo...
-            ..........
+#             ..........
+#             ...oooo...
+#             ...o#oo...
+#             ...oooo...
+#             ..........
 
-            """
-        s = ""
-        for y in range(self.height()):
-            for x in range(self.width()):
-                if self[y][x] == 0:
-                    s += '.'
-                elif self[y][x] == 1:
-                    s += 'o'
-                else:
-                    s += '#'
-            s += '\n'
-        return s
+#             """
+#         s = ""
+#         for y in range(self.shape[1]):
+#             for x in range(self.shape[0]):
+#                 if self[y, x] == 0:
+#                     s += '.'
+#                 elif self[y, x] == 1:
+#                     s += 'o'
+#                 else:
+#                     s += '#'
+#             s += '\n'
+#         return s
         
 
 
@@ -153,8 +154,8 @@ class Nucleus:
         self.up = up
         self.down = down
 
-        # Прописываем зародыш в поле и в списке зародышей.
-        mca.field[y][x] = self
+        # Прописываем зародыш в списке зародышей.
+        mca.field[y, x] = 2
         mca.nuclei.append(self)
 
     def __str__(self):
@@ -182,7 +183,7 @@ class Nucleus:
         y2 = min(self.y + gap + 1, n)
         for j in range(y1, y2):
             for i in range(x1, x2):
-                if f[j][i] != 0 and (i != self.x or j != self.y):
+                if f[j, i] != 0 and (i != self.x or j != self.y):
                     debug("Something found at x = %s and y = %s!", i, j)
                     return True
         debug("Nothing found near.")
@@ -244,7 +245,7 @@ class Nucleus:
             else:
                 self.can_grow_left = True
                 for y in range(max(yu + 1, 0), min(yd, n)):
-                    if self.mca.field[y][xl] != 0:
+                    if self.mca.field[y, xl] != 0:
                         self.can_grow_left = False
                         debug("Something found on the left. Can't grow left.")
                         break
@@ -257,7 +258,7 @@ class Nucleus:
             else:
                 self.can_grow_right = True
                 for y in range(max(yu + 1, 0), min(yd, n)):
-                    if self.mca.field[y][xr] != 0:
+                    if self.mca.field[y, xr] != 0:
                         self.can_grow_right = False
                         debug("Something found on the right. Can't grow right.")
                         break
@@ -278,7 +279,7 @@ class Nucleus:
             else:
                 self.can_grow_up = True
                 for x in range(max(xl + 1, 0), min(xr, n)):
-                    if self.mca.field[yu][x] != 0:
+                    if self.mca.field[yu, x] != 0:
                         self.can_grow_up = False
                         debug("Something found on the up. Can't grow up.")
                         break
@@ -291,7 +292,7 @@ class Nucleus:
             else:
                 self.can_grow_down = True
                 for x in range(max(xl + 1, 0), min(xr, n)):
-                    if self.mca.field[yd][x] != 0:
+                    if self.mca.field[yd, x] != 0:
                         self.can_grow_down = False
                         debug("Something found on the down. Can't grow down.")
                         break
@@ -318,9 +319,9 @@ class Nucleus:
             else:
                 self.die()
         else:
-            choices = [self.can_grow_left, self.can_grow_right, self.can_grow_up, self.can_grow_down]
-            directions = [self.grow_to_left, self.grow_to_right, self.grow_to_up, self.grow_to_down]
-            can_grow = [directions[i] for i in range(4) if choices[i]]
+            choices = [self.can_grow_left, self.can_grow_right, self.can_grow_up, self.can_grow_down]   # boolean values
+            directions = [self.grow_to_left, self.grow_to_right, self.grow_to_up, self.grow_to_down]    # methods
+            can_grow = [directions[i] for i in range(4) if choices[i]]               # list of allowed directions
             grow_to = random.choice(can_grow)
             debug("choices = %s, grow_to = %s, let's grow.", choices, grow_to)
             grow_to()
@@ -338,7 +339,7 @@ class Nucleus:
         info("Growing left.")
         self.left += 1
         for y in range(self.y - self.up, self.y + self.down + 1):
-            self.mca.field[y][self.x - self.left] = 1
+            self.mca.field[y, self.x - self.left] = 1
 
     def grow_to_right(self):
         """Зародыш растёт направо.
@@ -349,7 +350,7 @@ class Nucleus:
         info("Growing right.")
         self.right += 1
         for y in range(self.y - self.up, self.y + self.down + 1):
-            self.mca.field[y][self.x + self.right] = 1
+            self.mca.field[y, self.x + self.right] = 1
 
     def grow_to_up(self):
         """Зародыш растёт вверх.
@@ -360,7 +361,7 @@ class Nucleus:
         info("Growing up.")
         self.up += 1
         for x in range(self.x - self.left, self.x + self.right + 1):
-            self.mca.field[self.y - self.up][x] = 1
+            self.mca.field[self.y - self.up, x] = 1
 
     def grow_to_down(self):
         """Зародыш растёт вниз.
@@ -371,7 +372,7 @@ class Nucleus:
         info("Growing down.")
         self.down += 1
         for x in range(self.x - self.left, self.x + self.right + 1):
-            self.mca.field[self.y + self.down][x] = 1
+            self.mca.field[self.y + self.down, x] = 1
 
 
     def die(self):
@@ -391,7 +392,7 @@ class Nucleus:
         else:
             for i in range(self.x - self.left, self.x + self.right + 1):
                 for j in range(self.y - self.up, self.y + self.down + 1):
-                    self.mca.field[j][i] = 0
+                    self.mca.field[j, i] = 0
 
         info("The nucleus died.")
 
@@ -428,7 +429,8 @@ class MCA:
 
         # Create a field, initialize it with zeros
         # Create an empty list of nuclei and fibers
-        self.field = Field([[0 for i in range(field_size)] for i in range(field_size)])
+        self.field = numpy.zeros((field_size, field_size), dtype = numpy.int8)
+        # Field([[0 for i in range(field_size)] for i in range(field_size)])
         self.nuclei = []
         self.fibers = []
         self.condemned = []
