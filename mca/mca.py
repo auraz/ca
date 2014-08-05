@@ -429,7 +429,7 @@ class MCA:
 
         # Create a field, initialize it with zeros
         # Create an empty list of nuclei and fibers
-        self.field = numpy.zeros((field_size, field_size), dtype = numpy.int8)
+        self.field = numpy.zeros((field_size, field_size), dtype = numpy.int64)
         # Field([[0 for i in range(field_size)] for i in range(field_size)])
         self.nuclei = []
         self.fibers = []
