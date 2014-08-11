@@ -4,7 +4,7 @@ from math import *
 from model6 import *
 
 m = Model6(
-    n  = 300,
+    n  = 100,
     a  = 0.1,
     f  = 8,
     g1 = 14,
@@ -48,3 +48,40 @@ print "Difference:", 100. * (ci_dots - sq_dots) / sq_dots, "%."
 
 im2 = plt.imshow(canvas, cmap=cm.gray, interpolation='nearest')
 plt.show()
+
+
+
+from mayavi import mlab
+
+h = 700
+t = 90
+dphi = 2*pi / t
+phi = numpy.linspace(0, 2*pi, t + 1)
+
+x, y, z = [], [], []
+for center in fibers_centens:
+    xc, yc = center
+    x.append(numpy.array((xc + numpy.zeros(t + 1),
+                          xc + r * numpy.cos(phi),
+                          xc + r * numpy.cos(phi),
+                          xc + numpy.zeros(t + 1))))
+
+    y.append(numpy.array((yc + numpy.zeros(t + 1),
+                          yc + r * numpy.sin(phi),
+                          yc + r * numpy.sin(phi),
+                          yc + numpy.zeros(t + 1))))
+
+    z.append(numpy.array((numpy.zeros(t + 1),
+                          numpy.zeros(t + 1),
+                          numpy.ones(t + 1) * h,
+                          numpy.ones(t + 1) * h)))
+
+
+x = numpy.vstack(x)
+y = numpy.vstack(y)
+z = numpy.vstack(z)
+
+
+mlab.mesh(x, y, z, colormap = 'winter')
+mlab.show()
+
