@@ -132,7 +132,7 @@ class Model6(MCA):
         print "Fibers take {}%.".format(concentration)
 
         if plot or (plot == "each step"):
-            field_to_plot = [[1 if i == 2 else -i * 4
+            field_to_plot = [[1 if i == 2 else i * 1
                 for i in j] for j in self.field]
             im = plt.imshow(field_to_plot, cmap=cm.gray, interpolation='nearest')
             plt.show()

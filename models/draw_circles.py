@@ -4,14 +4,16 @@ from math import *
 from model6 import *
 
 m = Model6(
-    n  = 100,
+    n  = 300,
     a  = 0.1,
     f  = 8,
     g1 = 14,
     g2 = 7)
-m.run(step = 0.1, plot = False)
+m.run(step = 0.1, plot = True)
 
 n = m.field_size
+
+# 2D visualization: circles
 
 zoom = 5
 canvas = numpy.zeros((n * zoom, ) * 2, dtype = numpy.int64)
@@ -53,7 +55,7 @@ plt.show()
 
 from mayavi import mlab
 
-h = 700
+h = 2000
 t = 90
 dphi = 2*pi / t
 phi = numpy.linspace(0, 2*pi, t + 1)
