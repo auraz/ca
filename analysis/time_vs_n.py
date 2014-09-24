@@ -9,7 +9,7 @@ def run_many_times(loops):
     clock_list = [[] for i in range(loops)]
     time_list  = [[] for i in range(loops)]
     for i in range(loops):
-        for n in [50, 63, 80, 100, 125, 160, 200, 250, 320, 400, 500, 630, 800, 1000]:
+        for n in [50, 63, 80, 100, 125, 160, 200, 250, 320, 400, 500, 630, 800, 1000, 1250, 1600, 2000, 2500, 3200, 4000, 5000]:
             print
             print "~~~~~~~~~~~~~~ Loop No.", i+1, ", n =", n, "~~~~~~~~~~~~~~"
             print
@@ -21,7 +21,7 @@ def run_many_times(loops):
                 f  = 8,
                 g1 = 15,
                 g2 = 7
-            ).run(step = 1.0 if n < 500 else 0.25, plot = False)
+            ).run(step = 1.0 if n < 1000 else 0.1, plot = False)
             clock_list[i].append(clock() - c)
             time_list[i] .append(time () - t)
         
@@ -53,4 +53,4 @@ def run_once():
 
 if __name__ == '__main__':
     # run_once()
-    run_many_times(20)
+    run_many_times(1)
