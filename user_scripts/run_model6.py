@@ -11,3 +11,12 @@ m = MCA(
 )
 m.spawn_nuclei(plot = True)
 m.grow_fibers(plot = True)
+
+
+
+
+import pickle
+
+f = open("mca.pickle", 'wb')
+pickle.dump(m, f)
+f.close()
