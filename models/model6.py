@@ -81,7 +81,7 @@ class Model6(MCA):
         
         # return len(self.nuclei)
 
-        self.plot()
+        # self.plot()
 
         self.field *= 0 # numpy.zeros((field_size, field_size), dtype = numpy.int64)
         for nuc in self.nuclei:
