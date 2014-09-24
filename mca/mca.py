@@ -155,8 +155,22 @@ class Nucleus:
         self.down = down
 
         # Прописываем зародыш в списке зародышей.
-        mca.field[y, x] = 2
+        # mca.field[y, x] = 2
         mca.nuclei.append(self)
+
+        f = self.mca.field
+        n = self.mca.field_size
+        gap = self.mca.gap
+        x1 = max(self.x - gap, 0)
+        y1 = max(self.y - gap, 0)
+        x2 = min(self.x + gap + 1, n)
+        y2 = min(self.y + gap + 1, n)
+        for j in range(y1, y2):
+            for i in range(x1, x2):
+                f[j, i] += 1
+        
+        f[y, x] = 6
+
 
     def __str__(self):
         """Возвращает '#'."""

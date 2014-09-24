@@ -51,13 +51,17 @@ class Model6(MCA):
         else:
             raise TypeError("'step' must be an int or a float.")
 
-        nuclei_spawned = self.spawn_nuclei(step)
-        nuclei_grown, concentration = self.grow_nuclei(plot)
-        return concentration
+        # nuclei_spawned = self.spawn_nuclei(step)
+        # nuclei_grown, concentration = self.grow_nuclei(plot)
+        # return concentration
+
+        self.spawn_nuclei(step)
+        self.grow_nuclei(plot)
 
 
 
     def spawn_nuclei(self, step):
+        # Make a list of random numbers without repetitions:
         random_list = range(self.field_size**2)
         random.shuffle(random_list)
 
@@ -65,17 +69,24 @@ class Model6(MCA):
             for r in random_list[i * step : (i + 1) * step]:
                 x = r % self.field_size
                 y = r / self.field_size
-                nuc = Nucleus(x, y, self)
-                if nuc.is_anything_near():
-                    nuc.die()
+                if self.field[y, x] == 0:
+                    nuc = Nucleus(x, y, self)
+                # if nuc.is_anything_near():
+                #     nuc.die()
                 # else:
                 #     info("A random nucleus is spawned. x = %s, y = %s.", x, y)
                 #     self.report()
             # print i * step, "-", (i + 1) * step, ":",
             print (i + 1) * step, len(self.nuclei)
         
-        return len(self.nuclei)
+        # return len(self.nuclei)
 
+        self.plot()
+
+        self.field *= 0 # numpy.zeros((field_size, field_size), dtype = numpy.int64)
+        for nuc in self.nuclei:
+            self.field[nuc.y, nuc.x] = 2
+        # self.plot()
 
 
     # def spawn_nuclei_in_old_way(self, step):
@@ -142,7 +153,8 @@ class Model6(MCA):
             # im = plt.imshow(field_of_numbers, cmap=cm.gray, interpolation='nearest')
             # plt.show()
 
-        return len(self.nuclei), concentration
+        # return len(self.nuclei), concentration
+        self.concentration = concentration
 
 #     if len(self.nuclei) == 0:
         #         info("There are no more nuclei. Stopping the model.")
@@ -153,6 +165,9 @@ class Model6(MCA):
         # print "{} nuclei have grown to fibers.".format(len(self.fibers))
         
 
+    def plot(self):
+        im = plt.imshow(self.field, cmap=cm.gray, interpolation='nearest')
+        plt.show()
 
 
 
@@ -194,11 +209,11 @@ def run_many_times():
 
 def run_once():
     Model6(
-        n  = 300,
-        a  = 0.1,
-        f  = 8,
-        g1 = 14,
-        g2 = 7
+        n  = 100,
+        a  = 1.0,
+        f  = 4,
+        g1 = 7,
+        g2 = 3
     ).run(step = 0.1, plot = False)
 
 
