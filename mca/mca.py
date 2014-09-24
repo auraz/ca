@@ -72,8 +72,12 @@ from logging import debug, info
 import sys
 sys.path.append("..")
 
-# from ca.grid import Grid
 import numpy
+# import numpy as np
+import matplotlib.cm as cm
+import matplotlib.mlab as mlab
+import matplotlib.pyplot as plt
+
 
 # class Field(numpy.ndarray):
 #     """Этот класс создан только для того, чтобы переопределить метод __str__()."""
@@ -155,7 +159,6 @@ class Nucleus:
         self.down = down
 
         # Прописываем зародыш в списке зародышей.
-        # mca.field[y, x] = 2
         mca.nuclei.append(self)
 
         f = self.mca.field
@@ -169,7 +172,7 @@ class Nucleus:
             for i in range(x1, x2):
                 f[j, i] += 1
         
-        f[y, x] = 6
+        f[y, x] = self.mca.nucleus_cell_value
 
 
     def __str__(self):
@@ -456,6 +459,11 @@ class MCA:
         info("There are now %s nuclei and %s fibers. The field now looks like this:", 
             len(self.nuclei), len(self.fibers))
         info(self.field)
+
+
+    def plot(self):
+        im = plt.imshow(self.field, cmap=cm.gray, interpolation='nearest')
+        plt.show()
 
 
         

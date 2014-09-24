@@ -9,4 +9,5 @@ m = Model6(
     g1 = 14,
     g2 = 7
 )
-m.run(step = 0.1, plot = True)
+m.spawn_nuclei(plot = True)
+m.grow_fibers(plot = True)
