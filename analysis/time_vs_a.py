@@ -1,6 +1,6 @@
 import sys
 sys.path.append("..")
-from models.model6 import *
+from mca.mca import *
 from time import time, clock
 
 
@@ -15,7 +15,7 @@ def run_many_times(loops):
             print
             c = clock()
             t = time()
-            Model6(
+            MCA(
                 n  = 250,
                 a  = a,
                 f  = 8,
@@ -42,7 +42,7 @@ def run_many_times(loops):
 
 
 def run_once():
-    Model6(
+    MCA(
         n  = 500,
         a  = 0.03,
         f  = 8,

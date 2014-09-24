@@ -1,6 +1,6 @@
 import sys
 sys.path.append("..")
-from models.model6 import *
+from mca.mca import *
 
 def non_blank_cells(g, d):
     """g is grid, d is distance from the border."""
@@ -24,7 +24,7 @@ def non_blank_concentration(g, d):
 
 def run_once():
     n = 600
-    m = Model6(
+    m = MCA(
         n  = n,
         a  = 0.04,
         f  = 17,
@@ -39,16 +39,16 @@ def run_once():
 
 
 
-def run_many_times():
+def run_many_times(loops):
     general_results = []
     n = 600
-    for i in range(100):
+    for i in range(loops):
         print
         print "~~~~~~~~~~~~~~ Launch No.", i+1, "~~~~~~~~~~~~~~"
         print
 
         results = []
-        m = Model6(
+        m = MCA(
             n  = n,
             a  = 0.04,
             f  = 17,
@@ -75,4 +75,4 @@ def run_many_times():
 
 if __name__ == '__main__':
     # run_once()
-    run_many_times()
+    run_many_times(10)

@@ -16,7 +16,6 @@ import sys
 sys.path.append("..")
 
 from mca.mca import *
-from models.model4 import Model4
 
 
 
@@ -109,7 +108,7 @@ class Model6(MCA):
             self.plot()
 
 
-        
+
 
 
 

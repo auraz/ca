@@ -1,8 +1,8 @@
 import sys
 sys.path.append("..")
-from models.model6 import *
+from mca.mca import *
 
-m = Model6(
+m = MCA(
     n  = 300,
     a  = 1.0,
     f  = 8,

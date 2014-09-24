@@ -1,12 +1,9 @@
 import sys
 sys.path.append("..")
-from models.model6 import *
+from mca.mca import *
 
-class Model6_adjusted(Model6):
-    """Model 6, adjusted for an investigation"""
-    # def __init__(self, arg):
-    #   super(Model6_adjusted, self).__init__()
-    #   self.arg = arg
+class MCA_adjusted(MCA):
+    """MCA, adjusted for an investigation"""
     
     def spawn_nuclei(self, stops):
         random_list = range(self.field_size**2)
@@ -16,9 +13,8 @@ class Model6_adjusted(Model6):
         for i in range(self.attempts):
             x = random_list[i] % self.field_size
             y = random_list[i] / self.field_size
-            nuc = Nucleus(x, y, self)
-            if nuc.is_anything_near():
-                nuc.die()
+            if self.field[y, x] == 0:
+                nuc = Nucleus(x, y, self)
             if i+1 in stops:
                 results.append(len(self.nuclei))
                 print i+1, len(self.nuclei)
@@ -26,8 +22,11 @@ class Model6_adjusted(Model6):
         return results
 
 
+
+
+
 def run_once():
-    print Model6_adjusted(
+    print MCA_adjusted(
         n  = 100,
         a  = 10000,
         f  = 4,
@@ -50,7 +49,7 @@ def print_general_results(stops, general_results):
         print '\n',
 
 
-def run_many_times():
+def run_many_times(loops):
     general_results = []
     stops = [1,          2,    3,    5,    7,
              10,   15,   20,   30,   50,   70,
@@ -59,12 +58,12 @@ def run_many_times():
              10000,15000,20000,21500,22000,22250,
              22400,22470,22490,22493,22499,22500]
 
-    for i in range(100):
+    for i in range(loops):
         print
         print "~~~~~~~~~~~~~~ Launch No.", i+1, "~~~~~~~~~~~~~~"
         print
 
-        general_results.append(Model6_adjusted(
+        general_results.append(MCA_adjusted(
             n  = 150,
             a  = 22500,
             f  = 4,
@@ -78,4 +77,4 @@ def run_many_times():
 
 if __name__ == '__main__':
     # run_once()
-    run_many_times()
+    run_many_times(20)
