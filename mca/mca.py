@@ -161,6 +161,7 @@ class Nucleus:
         # Прописываем зародыш в списке зародышей.
         mca.nuclei.append(self)
 
+        # Увеличиваем значение всех клеток "мёртвой зоны" на 1.
         f = self.mca.field
         n = self.mca.field_size
         gap = self.mca.gap
@@ -172,6 +173,7 @@ class Nucleus:
             for i in range(x1, x2):
                 f[j, i] += 1
         
+        # В самой клетке зародыша прописываем фиксированное значение (переда)
         f[y, x] = self.mca.nucleus_cell_value
 
 
