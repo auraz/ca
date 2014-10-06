@@ -10,8 +10,9 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 
-
-
+mpl.rcParams['figure.figsize' ] = 6, 6    # figure size in inches
+mpl.rcParams[ 'axes.facecolor'] = 'black'
+mpl.rcParams['patch.facecolor'] = 'white'
 
 def fibers_centers(mca):
     centers = []
@@ -19,9 +20,9 @@ def fibers_centers(mca):
         # explain why you add 0.5!
         xc = 0.5 + nuc.x - nuc.left * 0.5 + nuc.right * 0.5
         yc = 0.5 + nuc.y - nuc.up   * 0.5 + nuc.down  * 0.5
-        print xc, yc
+        # print xc, yc
         centers.append((xc, yc))
-    print
+    # print
     return centers
 
 
@@ -33,7 +34,7 @@ def shift_centers(centers, n, r):
         xc = xc if xc + r < n else n - r
         yc = yc if yc - r > 0 else r
         yc = yc if yc + r < n else n - r
-        print xc, yc
+        # print xc, yc
         new_centers.append((xc, yc))
     return new_centers
 
