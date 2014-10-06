@@ -42,6 +42,7 @@ def run_once():
 def run_many_times(loops):
     general_results = []
     n = 600
+    # n = 200
     for i in range(loops):
         print
         print "~~~~~~~~~~~~~~ Launch No.", i+1, "~~~~~~~~~~~~~~"
@@ -54,8 +55,13 @@ def run_many_times(loops):
             f  = 17,
             g1 = 30,
             g2 = 15
+            # n  = n,
+            # a  = 1.0,
+            # f  = 4,
+            # g1 = 7,
+            # g2 = 3
         )
-        m.run(step = 0.1, plot = False)
+        m.run(step = 0.25, plot = False)
 
         for d in range(n / 2):
             results.append(non_blank_concentration(m.field, d))
@@ -75,4 +81,4 @@ def run_many_times(loops):
 
 if __name__ == '__main__':
     # run_once()
-    run_many_times(10)
+    run_many_times(100)

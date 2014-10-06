@@ -3,11 +3,11 @@ sys.path.append("..")
 from mca.mca import *
 
 m = MCA(
-    n  = 100,
+    n  = 10,
     a  = 1.0,
-    f  = 8,
-    g1 = 14,
-    g2 = 7
+    f  = 3,
+    g1 = 2,
+    g2 = 1
 )
 m.spawn_nuclei(plot = True)
 m.grow_fibers(plot = True)
@@ -22,7 +22,7 @@ pickle.dump(m, f)
 f.close()
 
 
-from visualization.circles import *
+# from visualization.circles import *
 
-draw_circles(m)
-shift_and_draw_circles(m)
+# draw_circles(m)
+# shift_and_draw_circles(m)
