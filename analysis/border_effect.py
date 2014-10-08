@@ -41,8 +41,8 @@ def run_once():
 
 def run_many_times(loops):
     general_results = []
-    n = 600
-    # n = 200
+    # n = 600
+    n = 200
     for i in range(loops):
         print
         print "~~~~~~~~~~~~~~ Launch No.", i+1, "~~~~~~~~~~~~~~"
@@ -50,16 +50,16 @@ def run_many_times(loops):
 
         results = []
         m = MCA(
-            n  = n,
-            a  = 0.04,
-            f  = 17,
-            g1 = 30,
-            g2 = 15
             # n  = n,
-            # a  = 1.0,
-            # f  = 4,
-            # g1 = 7,
-            # g2 = 3
+            # a  = 0.04,
+            # f  = 17,
+            # g1 = 30,
+            # g2 = 15
+            n  = n,
+            a  = 1.0,
+            f  = 4,
+            g1 = 7,
+            g2 = 3
         )
         m.run(step = 0.25, plot = False)
 
