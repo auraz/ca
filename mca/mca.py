@@ -454,7 +454,7 @@ class Base_MCA:
         self.gap = gap
 
         # Create a field, initialize it with zeros
-        self.field = numpy.zeros((field_size, field_size), dtype = numpy.int64)
+        self.field = numpy.zeros((field_size, field_size), dtype = numpy.int8)
 
         # Create an empty list of nuclei and fibers
         self.nuclei = []
@@ -515,8 +515,8 @@ class MCA(Base_MCA):
         self.nucleus_cell_value = nucleus_cell_value
 
         # Make a list of random numbers without repetitions:
-        random_list = range(self.field_size**2)
-        random.shuffle(random_list)
+        random_list = numpy.arange(self.field_size**2, dtype = numpy.int32)
+        numpy.random.shuffle(random_list)
 
         for i in range(self.attempts / step):
             for r in random_list[i * step : (i + 1) * step]:
